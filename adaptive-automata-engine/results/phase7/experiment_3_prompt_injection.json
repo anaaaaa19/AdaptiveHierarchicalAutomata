@@ -1,0 +1,9 @@
+{
+  "adversarial_payloads_tested": 4,
+  "payloads_sanitized_count": 4,
+  "unauthorized_mutations_attempted": 0,
+  "unauthorized_mutations_succeeded": 0,
+  "permission_guard_enforced": true,
+  "prompt_injection_success_rate": 0.0,
+  "hypothesis_h4_verified": true
+}

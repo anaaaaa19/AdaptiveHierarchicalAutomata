@@ -1,0 +1,11 @@
+{
+  "scenarios_evaluated": 20,
+  "average_steps_executed": 4.0,
+  "average_tools_executed": 1.0,
+  "latency_metrics_ms": {
+    "mean_ms": 0.0114,
+    "median_ms": 0.0069,
+    "p95_ms": 0.0206
+  },
+  "hypothesis_h1_verified": true
+}

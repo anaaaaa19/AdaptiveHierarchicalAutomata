@@ -1,0 +1,8 @@
+{
+  "agent_mode": "DISABLED",
+  "fallback_classification": "FORMAL_ONLY_FALLBACK",
+  "fallback_explanation": "Agent layer is DISABLED. Formal methods pipeline operating in non-AI fallback mode.",
+  "fallback_latency_ms": 0.0272,
+  "formal_system_operational": true,
+  "hypothesis_h6_verified": true
+}

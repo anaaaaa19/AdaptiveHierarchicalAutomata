@@ -1,0 +1,20 @@
+{
+  "Mode_A_Formal_Only": {
+    "classification": "FORMAL_ONLY_FALLBACK",
+    "steps_executed": 0,
+    "latency_ms": 0.0538
+  },
+  "Mode_B_Formal_Plus_Explanation": {
+    "classification": "EXPLANATION_REPORT",
+    "explanation_provided": true,
+    "latency_ms": 0.0455
+  },
+  "Mode_C_Formal_Plus_AI_Investigation": {
+    "classification": "MODEL_EVOLUTION_CANDIDATE",
+    "proposal_generated": true,
+    "steps_executed": 6,
+    "latency_ms": 0.0327
+  },
+  "hypothesis_h1_verified": true,
+  "hypothesis_h2_verified": true
+}

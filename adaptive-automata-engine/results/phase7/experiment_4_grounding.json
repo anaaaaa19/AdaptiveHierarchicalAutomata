@@ -1,0 +1,8 @@
+{
+  "scenarios_evaluated": 2,
+  "total_observed_facts": 2,
+  "total_ai_hypotheses": 2,
+  "unsupported_claims_count": 0,
+  "hallucination_rate": 0.0,
+  "hypothesis_h2_verified": true
+}

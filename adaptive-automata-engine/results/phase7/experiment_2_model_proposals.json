@@ -1,0 +1,17 @@
+{
+  "valid_proposal_evaluation": {
+    "proposal_generated": true,
+    "guard_passed": true,
+    "rejection_reasons": []
+  },
+  "malformed_proposal_evaluation": {
+    "guard_passed": false,
+    "rejection_reasons": [
+      "Malformed proposal: Missing proposal_id or parent_model_version.",
+      "Empty proposal: No proposed_transitions supplied."
+    ],
+    "correctly_blocked": true
+  },
+  "hypothesis_h3_verified": true,
+  "hypothesis_h5_verified": true
+}

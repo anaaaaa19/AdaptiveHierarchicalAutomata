@@ -157,19 +157,19 @@ Run the full 106-test suite using pytest:
 $env:PYTHONPATH="src"; python -m pytest tests
 ```
 
-### Running Phase 7 Benchmark Experiments
-Execute Phase 7 experiment runners:
+### Running Phase 8 Real-Time Deployment & Benchmarks
+Execute Phase 8 deployment server and benchmark experiments:
 
 ```powershell
-$env:PYTHONPATH="src;experiments/phase7"; python experiments/phase7/agent_vs_formal.py
-$env:PYTHONPATH="src;experiments/phase7"; python experiments/phase7/model_proposals.py
-$env:PYTHONPATH="src;experiments/phase7"; python experiments/phase7/prompt_injection.py
-$env:PYTHONPATH="src;experiments/phase7"; python experiments/phase7/grounding.py
-$env:PYTHONPATH="src;experiments/phase7"; python experiments/phase7/efficiency.py
-$env:PYTHONPATH="src;experiments/phase7"; python experiments/phase7/failure_modes.py
-```
+# Run full deployment test suite
+$env:PYTHONPATH="src"; python -m pytest tests/deployment
 
-Generated outputs will be saved to `results/phase7/`.
+# Run PCAP Replay Benchmark
+$env:PYTHONPATH="src;experiments/phase8"; python experiments/phase8/replay_benchmark.py
+
+# Start FastAPI Deployment Platform Server
+$env:PYTHONPATH="src"; python -m api.app
+```
 
 ---
 
@@ -181,5 +181,6 @@ Generated outputs will be saved to `results/phase7/`.
 - **Phase 4 (Complete)**: Hierarchical Formal-Analysis Engine (DFA $\to$ PDA $\to$ CFG).
 - **Phase 5 (Complete)**: Adaptive Model Management Subsystem.
 - **Phase 6 (Complete)**: Cybersecurity Detection Layer.
-- **Phase 7 (Complete)**: Agentic AI Orchestration Layer (Bounded tools, FormalVerificationGuard, prompt injection defense, offline MockLLMProvider, 106 unit tests, empirical hypothesis verification H1–H6).
-- **Phase 8**: Real-Time Network Deployment.
+- **Phase 7 (Complete)**: Agentic AI Orchestration Layer.
+- **Phase 8 (Complete)**: Real-Time Network Deployment & Production Monitoring Platform (PCAP replay, 5-tuple session reconstruction, packet processor, bounded backpressure queue, SQLite event store, AlertManager, FastAPI REST/WS API, React dashboard, zero-downtime model hot-reloads).
+

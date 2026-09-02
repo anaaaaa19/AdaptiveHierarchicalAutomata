@@ -43,6 +43,10 @@ class SecurityAlert:
     analysis_level: str = "DFA_MEALY"
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
+    @property
+    def count(self) -> int:
+        return self.evidence.get("count", 1)
+
     @classmethod
     def from_assessment(cls, assessment: SecurityAssessment, alert_id: str, state: str, symbol: str, position: int = 0, level: str = "DFA_MEALY") -> "SecurityAlert":
         """Construct a human-readable SecurityAlert from a SecurityAssessment."""

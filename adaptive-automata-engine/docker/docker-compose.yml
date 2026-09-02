@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MODE=DEPLOYMENT_MODE
+      - SQLITE_DB_PATH=/app/events.db
+    volumes:
+      - engine-data:/app
+
+volumes:
+  engine-data:

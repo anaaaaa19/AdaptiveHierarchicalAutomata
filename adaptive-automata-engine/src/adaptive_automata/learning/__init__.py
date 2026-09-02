@@ -1,4 +1,4 @@
-"""Active Automata Learning package based on the L* paradigm for Mealy Machines."""
+"""Active and Passive Automata Learning package based on L* and trace inference."""
 
 from .observation_table import ObservationTable
 from .equivalence import (
@@ -8,6 +8,10 @@ from .equivalence import (
     ExactMealyEquivalenceOracle,
 )
 from .lstar import LStarLearner, LearningResult
+from .confidence import ConfidenceLevel, TransitionMetadata, ConfidenceCalculator
+from .passive import PassiveInferenceEngine
+from .hybrid import HybridActiveLearner
+from .evolution import ProtocolEvolutionAnalyzer, ProtocolEvolutionResult
 
 __all__ = [
     "ObservationTable",
@@ -17,4 +21,11 @@ __all__ = [
     "ExactMealyEquivalenceOracle",
     "LStarLearner",
     "LearningResult",
+    "ConfidenceLevel",
+    "TransitionMetadata",
+    "ConfidenceCalculator",
+    "PassiveInferenceEngine",
+    "HybridActiveLearner",
+    "ProtocolEvolutionAnalyzer",
+    "ProtocolEvolutionResult",
 ]

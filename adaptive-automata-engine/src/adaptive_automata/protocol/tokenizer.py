@@ -1,12 +1,21 @@
+"""
+Protocol Stream and Message Tokenizer abstractions.
+
+Converts raw protocol streams and structured ProtocolMessage instances into discrete
+ProtocolTokens and (input_symbol, output_symbol) transduction tuples.
+"""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Mapping
+
+from .trace import MessageDirection, ProtocolMessage, ProtocolSession
 
 
 @dataclass(frozen=True, slots=True)
 class ProtocolToken:
     """
-    Discrete protocol symbol produced by tokenizing a protocol stream.
+    Discrete protocol symbol produced by tokenizing a protocol stream or message.
 
     Attributes:
         token_type: High-level classification (e.g., 'HEADER', 'COMMAND', 'DELIMITER', 'PAYLOAD').
@@ -24,7 +33,7 @@ class ProtocolToken:
 
 
 class BaseTokenizer(ABC):
-    """Abstract base tokenizer for converting protocol inputs into ProtocolToken sequences."""
+    """Abstract base tokenizer for converting raw protocol inputs into ProtocolToken sequences."""
 
     @abstractmethod
     def tokenize(self, stream: Any) -> list[ProtocolToken]:
@@ -59,3 +68,79 @@ class DelimiterTokenizer(BaseTokenizer):
             )
             pos += 1
         return tokens
+
+
+class BaseMessageTokenizer(ABC):
+    """
+    Abstract Base Class for message-level protocol tokenizers.
+
+    Transforms structured ProtocolMessages into discrete ProtocolTokens and session transduction tuples.
+    """
+
+    @abstractmethod
+    def tokenize_message(self, message: ProtocolMessage) -> ProtocolToken:
+        """Convert a single ProtocolMessage into a canonical ProtocolToken."""
+        pass
+
+    def tokenize_session(self, session: ProtocolSession) -> list[tuple[str, str]]:
+        """
+        Tokenize a full session into a list of (input_symbol, output_symbol) transduction tuples.
+        """
+        pairs: list[tuple[str, str]] = []
+        msgs = session.messages
+        i = 0
+        n = len(msgs)
+        while i < n - 1:
+            req = msgs[i]
+            resp = msgs[i + 1]
+            if req.direction == MessageDirection.CLIENT_TO_SERVER and resp.direction == MessageDirection.SERVER_TO_CLIENT:
+                t_req = self.tokenize_message(req)
+                t_resp = self.tokenize_message(resp)
+                pairs.append((t_req.token_type, t_resp.token_type))
+                i += 2
+            else:
+                i += 1
+        return pairs
+
+
+class HeaderCommandTokenizer(BaseMessageTokenizer):
+    """
+    Tokenizer using high-level message types/commands, ignoring dynamic payload fields.
+    """
+
+    def tokenize_message(self, message: ProtocolMessage) -> ProtocolToken:
+        cmd_type = message.message_type.upper().strip()
+        return ProtocolToken(
+            token_type=cmd_type,
+            value=message.payload,
+            position=message.sequence_number,
+            metadata={"direction": message.direction.value},
+        )
+
+
+class JSONMessageTokenizer(BaseMessageTokenizer):
+    """
+    Modular tokenizer extracting message structural headers while abstracting payload fields.
+    """
+
+    def __init__(self, header_field: str = "cmd", type_override_field: str | None = None) -> None:
+        self.header_field = header_field
+        self.type_override_field = type_override_field
+
+    def tokenize_message(self, message: ProtocolMessage) -> ProtocolToken:
+        payload = message.payload
+        token_label = message.message_type
+
+        if isinstance(payload, dict):
+            if self.header_field in payload:
+                token_label = str(payload[self.header_field])
+            elif self.type_override_field and self.type_override_field in payload:
+                token_label = str(payload[self.type_override_field])
+
+        token_type = token_label.upper().strip()
+        return ProtocolToken(
+            token_type=token_type,
+            value=message.payload,
+            position=message.sequence_number,
+            metadata={"session_id": message.session_id, "direction": message.direction.value},
+        )

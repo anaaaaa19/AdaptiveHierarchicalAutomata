@@ -1,0 +1,52 @@
+{
+    "model_id": "ToyProtocol",
+    "protocol_version": "v1.0",
+    "sessions": [
+        {
+            "session_id": "sess_v1_001",
+            "duration_ms": 120.5,
+            "messages": [
+                {"sequence_number": 1, "direction": "INBOUND", "message_type": "SYN", "payload": {"cmd": "SYN"}},
+                {"sequence_number": 2, "direction": "OUTBOUND", "message_type": "SEND_SYN_ACK", "payload": {"status": "OK"}},
+                {"sequence_number": 3, "direction": "INBOUND", "message_type": "ACK", "payload": {"cmd": "ACK"}},
+                {"sequence_number": 4, "direction": "OUTBOUND", "message_type": "ALLOCATE_SESSION", "payload": {"session_id": "s1"}},
+                {"sequence_number": 5, "direction": "INBOUND", "message_type": "AUTH", "payload": {"cmd": "AUTH"}},
+                {"sequence_number": 6, "direction": "OUTBOUND", "message_type": "GRANT_TOKEN", "payload": {"token": "xyz"}},
+                {"sequence_number": 7, "direction": "INBOUND", "message_type": "DATA", "payload": {"cmd": "DATA"}},
+                {"sequence_number": 8, "direction": "OUTBOUND", "message_type": "ACK_DATA", "payload": {"bytes": 64}},
+                {"sequence_number": 9, "direction": "INBOUND", "message_type": "FIN", "payload": {"cmd": "FIN"}},
+                {"sequence_number": 10, "direction": "OUTBOUND", "message_type": "CLOSE_SESSION", "payload": {"closed": true}}
+            ]
+        },
+        {
+            "session_id": "sess_v1_002",
+            "duration_ms": 85.0,
+            "messages": [
+                {"sequence_number": 1, "direction": "INBOUND", "message_type": "SYN", "payload": {"cmd": "SYN"}},
+                {"sequence_number": 2, "direction": "OUTBOUND", "message_type": "SEND_SYN_ACK", "payload": {"status": "OK"}},
+                {"sequence_number": 3, "direction": "INBOUND", "message_type": "ACK", "payload": {"cmd": "ACK"}},
+                {"sequence_number": 4, "direction": "OUTBOUND", "message_type": "ALLOCATE_SESSION", "payload": {"session_id": "s2"}},
+                {"sequence_number": 5, "direction": "INBOUND", "message_type": "FIN", "payload": {"cmd": "FIN"}},
+                {"sequence_number": 6, "direction": "OUTBOUND", "message_type": "CLOSE_SESSION", "payload": {"closed": true}}
+            ]
+        },
+        {
+            "session_id": "sess_v1_003",
+            "duration_ms": 150.0,
+            "messages": [
+                {"sequence_number": 1, "direction": "INBOUND", "message_type": "SYN", "payload": {"cmd": "SYN"}},
+                {"sequence_number": 2, "direction": "OUTBOUND", "message_type": "SEND_SYN_ACK", "payload": {"status": "OK"}},
+                {"sequence_number": 3, "direction": "INBOUND", "message_type": "ACK", "payload": {"cmd": "ACK"}},
+                {"sequence_number": 4, "direction": "OUTBOUND", "message_type": "ALLOCATE_SESSION", "payload": {"session_id": "s3"}},
+                {"sequence_number": 5, "direction": "INBOUND", "message_type": "AUTH", "payload": {"cmd": "AUTH"}},
+                {"sequence_number": 6, "direction": "OUTBOUND", "message_type": "GRANT_TOKEN", "payload": {"token": "abc"}},
+                {"sequence_number": 7, "direction": "INBOUND", "message_type": "DATA", "payload": {"cmd": "DATA"}},
+                {"sequence_number": 8, "direction": "OUTBOUND", "message_type": "ACK_DATA", "payload": {"bytes": 128}},
+                {"sequence_number": 9, "direction": "INBOUND", "message_type": "DATA", "payload": {"cmd": "DATA"}},
+                {"sequence_number": 10, "direction": "OUTBOUND", "message_type": "ACK_DATA", "payload": {"bytes": 256}},
+                {"sequence_number": 11, "direction": "INBOUND", "message_type": "FIN", "payload": {"cmd": "FIN"}},
+                {"sequence_number": 12, "direction": "OUTBOUND", "message_type": "CLOSE_SESSION", "payload": {"closed": true}}
+            ]
+        }
+    ]
+}

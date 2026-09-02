@@ -1,0 +1,102 @@
+# Phase 5 Research Benchmark Report
+
+## 1. Quantitative Benchmark Summary
+
+```json
+{
+  "Experiment_A_Stable_Protocol": {
+    "Baseline_1_Static": {
+      "total_obs": 3,
+      "known_obs": 3,
+      "model_updates": 0
+    },
+    "Baseline_2_Hierarchical": {
+      "total_obs": 3,
+      "dfa_resolved": 3,
+      "model_updates": 0
+    },
+    "Baseline_3_NaiveAdaptive": {
+      "total_obs": 3,
+      "model_updates": 0
+    },
+    "Proposed_Phase5_Engine": {
+      "total_observations": 3,
+      "known_observations": 3,
+      "novel_observations": 0,
+      "unique_novel_behaviors": 0,
+      "drift_events": 0,
+      "candidate_models": 0,
+      "accepted_candidates": 0,
+      "rejected_candidates": 0,
+      "validation_failures": 0,
+      "active_model_version": "v1.1.0-hybrid",
+      "rollback_count": 0,
+      "dfa_resolved_events": 3,
+      "pda_escalations": 0,
+      "cfg_escalations": 0
+    },
+    "processing_time_ms": 0.186
+  },
+  "Experiment_B_Legitimate_Evolution": {
+    "Baseline_3_NaiveAdaptive": {
+      "model_updates": 0
+    },
+    "Proposed_Phase5_Engine": {
+      "total_observations": 4,
+      "known_observations": 1,
+      "novel_observations": 3,
+      "unique_novel_behaviors": 1,
+      "drift_events": 0,
+      "candidate_models": 1,
+      "accepted_candidates": 1,
+      "rejected_candidates": 2,
+      "validation_failures": 0,
+      "active_model_version": "v2.0.0-adapted",
+      "rollback_count": 0,
+      "dfa_resolved_events": 1,
+      "pda_escalations": 0,
+      "cfg_escalations": 0
+    },
+    "processing_time_ms": 0.332
+  },
+  "Experiment_C_Poisoning_Defense": {
+    "Baseline_3_NaiveAdaptive": {
+      "model_updates": 46,
+      "status": "VULNERABLE (Naively updated model graph from single session spam)"
+    },
+    "Proposed_Phase5_Engine": {
+      "metrics": {
+        "total_observations": 50,
+        "known_observations": 0,
+        "novel_observations": 50,
+        "unique_novel_behaviors": 1,
+        "drift_events": 41,
+        "candidate_models": 0,
+        "accepted_candidates": 0,
+        "rejected_candidates": 50,
+        "validation_failures": 0,
+        "active_model_version": "v1.1.0-hybrid",
+        "rollback_count": 0,
+        "dfa_resolved_events": 0,
+        "pda_escalations": 0,
+        "cfg_escalations": 0
+      },
+      "poisoning_susceptibility": "NONE (Blocked attack by session diversity policy: 1 < 3 sessions)",
+      "active_model_version": "v1.1.0-hybrid"
+    },
+    "processing_time_ms": 2.747
+  }
+}
+```
+
+## 2. Model Comparison Matrix
+
+| Modeling Engine | False Model Updates | Legitimate Evolution Adapted | Single-Session Poisoning Susceptibility | Model Version Preserved |
+| :--- | :---: | :---: | :---: | :---: |
+| **Baseline 1: Static Model** | 0 | ❌ No | Low | ❌ Static (v1 only) |
+| **Baseline 2: Hierarchical Model** | 0 | ❌ No | Low | ❌ Static (v1 only) |
+| **Baseline 3: Naive Adaptive Model** | ❌ High | ✅ Yes | ❌ High (Vulnerable to Spam) | ❌ Overwritten |
+| **Proposed: Phase 5 Engine** | **0** | **✅ Yes** | **Protected (Session Diversity Policy)** | **✅ Immutable Versioning** |
+
+---
+*Report generated automatically by `experiments/phase5/run_experiment.py`.*

@@ -9,6 +9,7 @@ Requires multi-dimensional evidence: frequency + session diversity + successful 
 """
 
 from enum import Enum
+from .config import AdaptationConfig
 from .evidence import BehaviorEvidence
 
 
@@ -26,22 +27,24 @@ class AdaptationPolicy:
 
     def __init__(
         self,
-        min_observations: int = 5,
-        min_unique_sessions: int = 3,
-        min_successful_followups: int = 2,
-        require_structural_validation: bool = True,
+        config: AdaptationConfig | None = None,
+        min_observations: int | None = None,
+        min_unique_sessions: int | None = None,
+        min_successful_followups: int | None = None,
+        require_structural_validation: bool | None = None,
     ) -> None:
-        self.min_observations = min_observations
-        self.min_unique_sessions = min_unique_sessions
-        self.min_successful_followups = min_successful_followups
-        self.require_structural_validation = require_structural_validation
+        cfg = config or AdaptationConfig()
+        self.min_observations = min_observations if min_observations is not None else cfg.minimum_observations
+        self.min_unique_sessions = min_unique_sessions if min_unique_sessions is not None else cfg.minimum_sessions
+        self.min_successful_followups = min_successful_followups if min_successful_followups is not None else cfg.minimum_followups
+        self.require_structural_validation = (
+            require_structural_validation if require_structural_validation is not None else cfg.require_structural_validation
+        )
 
     def evaluate_evidence_strength(self, evidence: BehaviorEvidence) -> EvidenceStrength:
         """
         Evaluate overall evidence strength across multiple dimensions.
         """
-        score = evidence.calculate_evidence_score()
-
         if (
             evidence.observation_count >= self.min_observations
             and evidence.unique_session_count >= self.min_unique_sessions

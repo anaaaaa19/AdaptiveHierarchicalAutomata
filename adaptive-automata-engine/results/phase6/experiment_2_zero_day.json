@@ -1,0 +1,24 @@
+{
+  "Unseen_Zero_Day_Benchmark": {
+    "tp": 10,
+    "tn": 10,
+    "fp": 0,
+    "fn": 0,
+    "total_samples": 20,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "accuracy": 1.0,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.0,
+    "unseen_attack_detection_rate": 1.0,
+    "legitimate_evolution_acceptance_rate": 0.0,
+    "incorrect_adaptation_rate": 0.0,
+    "latency_metrics": {
+      "mean_ms": 0.0202,
+      "median_ms": 0.0157,
+      "p95_ms": 0.0451
+    }
+  },
+  "hypothesis_h4_verified": true
+}

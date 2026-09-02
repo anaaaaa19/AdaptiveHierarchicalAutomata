@@ -1,0 +1,27 @@
+{
+  "workload_distribution": {
+    "total_evaluations": 100,
+    "dfa_resolved_pct": 70.0,
+    "pda_escalated_pct": 15.0,
+    "cfg_escalated_pct": 15.0
+  },
+  "latency_benchmarks": {
+    "dfa_fast_path": {
+      "mean_ms": 0.0126,
+      "median_ms": 0.012,
+      "p95_ms": 0.0152
+    },
+    "cfg_heavy_parser": {
+      "mean_ms": 0.0216,
+      "median_ms": 0.0191,
+      "p95_ms": 0.0448
+    },
+    "hierarchical_escalation_engine": {
+      "mean_ms": 0.0135,
+      "median_ms": 0.012,
+      "p95_ms": 0.0203
+    }
+  },
+  "total_benchmark_time_ms": 1.394,
+  "hypothesis_h5_verified": true
+}

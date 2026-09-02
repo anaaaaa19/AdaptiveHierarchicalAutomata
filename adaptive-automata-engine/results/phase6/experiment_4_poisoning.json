@@ -1,0 +1,15 @@
+{
+  "Baseline_3_Naive_Adaptive": {
+    "incorrect_model_updates": 46,
+    "status": "VULNERABLE (Naively updated model graph from single-session spam)"
+  },
+  "Proposed_Phase5_6_Engine": {
+    "incorrect_model_updates": 0,
+    "rejected_candidates": 50,
+    "active_model_version": "v1.1.0-hybrid",
+    "poisoning_suspected_alerts": 50,
+    "status": "PROTECTED (Session diversity policy blocked attack: 1 < 3 sessions)"
+  },
+  "processing_time_ms": 3.291,
+  "hypothesis_h3_verified": true
+}

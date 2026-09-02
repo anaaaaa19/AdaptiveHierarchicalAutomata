@@ -1,0 +1,65 @@
+{
+  "Baseline_1_Static_DFA": {
+    "tp": 20,
+    "tn": 20,
+    "fp": 0,
+    "fn": 0,
+    "total_samples": 40,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "accuracy": 1.0,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.0,
+    "unseen_attack_detection_rate": 0.0,
+    "legitimate_evolution_acceptance_rate": 0.0,
+    "incorrect_adaptation_rate": 0.0,
+    "latency_metrics": {
+      "mean_ms": 0.0026,
+      "median_ms": 0.0026,
+      "p95_ms": 0.0051
+    }
+  },
+  "Baseline_2_Static_Hierarchical": {
+    "tp": 20,
+    "tn": 20,
+    "fp": 0,
+    "fn": 0,
+    "total_samples": 40,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "accuracy": 1.0,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.0,
+    "unseen_attack_detection_rate": 0.0,
+    "legitimate_evolution_acceptance_rate": 0.0,
+    "incorrect_adaptation_rate": 0.0,
+    "latency_metrics": {
+      "mean_ms": 0.0205,
+      "median_ms": 0.012,
+      "p95_ms": 0.0638
+    }
+  },
+  "Proposed_Adaptive_Hierarchical_Security_System": {
+    "tp": 20,
+    "tn": 20,
+    "fp": 0,
+    "fn": 0,
+    "total_samples": 40,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "accuracy": 1.0,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.0,
+    "unseen_attack_detection_rate": 0.0,
+    "legitimate_evolution_acceptance_rate": 0.0,
+    "incorrect_adaptation_rate": 0.0,
+    "latency_metrics": {
+      "mean_ms": 0.0205,
+      "median_ms": 0.0164,
+      "p95_ms": 0.0463
+    }
+  }
+}

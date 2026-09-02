@@ -11,10 +11,10 @@ from typing import Generic, Sequence, TypeVar
 
 from adaptive_automata.core.mealy import MealyMachine
 from adaptive_automata.core.state import State
-from adaptive_automata.models.versioning import ModelSource, VersionedProtocolModel
 from adaptive_automata.protocol.session import ProtocolSession
 from adaptive_automata.protocol.tokenizer import BaseMessageTokenizer, HeaderCommandTokenizer
 from .confidence import ConfidenceCalculator, ConfidenceLevel, TransitionMetadata
+
 
 SymbolT = TypeVar("SymbolT")
 OutputT = TypeVar("OutputT")
@@ -34,7 +34,7 @@ class PassiveInferenceEngine:
         tokenizer: BaseMessageTokenizer | None = None,
         model_id: str = "PassiveProtocolModel",
         version: str = "v1.0.0",
-    ) -> VersionedProtocolModel[str, str]:
+    ) -> "VersionedProtocolModel[str, str]":
         """
         Passively infer a VersionedProtocolModel from a collection of ProtocolSessions.
 
@@ -47,7 +47,10 @@ class PassiveInferenceEngine:
         Returns:
             VersionedProtocolModel containing inferred MealyMachine and confidence metrics.
         """
+        from adaptive_automata.models.versioning import ModelSource, VersionedProtocolModel
+
         start_time = time.perf_counter()
+
         tok = tokenizer or HeaderCommandTokenizer()
 
         # Step 1: Extract all session transduction sequences

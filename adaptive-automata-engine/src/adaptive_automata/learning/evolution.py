@@ -8,11 +8,11 @@ and new protocol traces, distinguishing valid extensions from malicious anomalie
 from dataclasses import dataclass, field
 from typing import Sequence
 
-from adaptive_automata.models.versioning import ModelSource, VersionedProtocolModel
 from adaptive_automata.protocol.session import ProtocolSession
 from adaptive_automata.protocol.tokenizer import BaseMessageTokenizer
 from .confidence import ConfidenceLevel, TransitionMetadata
 from .passive import PassiveInferenceEngine
+
 
 
 @dataclass(slots=True)
@@ -45,18 +45,21 @@ class ProtocolEvolutionAnalyzer:
 
     def analyze_evolution(
         self,
-        baseline_model: VersionedProtocolModel[str, str],
+        baseline_model: "VersionedProtocolModel[str, str]",
         new_sessions: Sequence[ProtocolSession],
         tokenizer: BaseMessageTokenizer | None = None,
         new_version: str = "v2.0.0-evolution",
-    ) -> tuple[VersionedProtocolModel[str, str], ProtocolEvolutionResult]:
+    ) -> tuple["VersionedProtocolModel[str, str]", ProtocolEvolutionResult]:
         """
         Compare new protocol traces against a baseline model to detect valid extensions.
 
         Returns:
             Tuple of (updated VersionedProtocolModel, ProtocolEvolutionResult).
         """
+        from adaptive_automata.models.versioning import ModelSource, VersionedProtocolModel
+
         # Step 1: Passively infer model from new traces
+
         new_model = self.passive_engine.infer_model(
             sessions=new_sessions,
             tokenizer=tokenizer,

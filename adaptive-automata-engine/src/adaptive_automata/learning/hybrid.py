@@ -11,11 +11,11 @@ import time
 from typing import Generic, TypeVar
 
 from adaptive_automata.core.state import State
-from adaptive_automata.models.versioning import ModelSource, VersionedProtocolModel
 from adaptive_automata.protocol.sut import SystemUnderTest
 from .confidence import ConfidenceLevel, TransitionMetadata
 from .lstar import LStarLearner
 from .observation_table import ObservationTable
+
 
 SymbolT = TypeVar("SymbolT")
 OutputT = TypeVar("OutputT")
@@ -60,17 +60,20 @@ class HybridActiveLearner(Generic[SymbolT, OutputT]):
 
     def refine_model(
         self,
-        passive_model: VersionedProtocolModel[SymbolT, OutputT],
+        passive_model: "VersionedProtocolModel[SymbolT, OutputT]",
         sut: SystemUnderTest[SymbolT, OutputT],
         new_version: str = "v1.1.0-hybrid",
-    ) -> VersionedProtocolModel[SymbolT, OutputT]:
+    ) -> "VersionedProtocolModel[SymbolT, OutputT]":
         """
         Refine a passive VersionedProtocolModel by actively querying unexplored state transitions on the SUT.
 
         Returns:
             Refined VersionedProtocolModel with ACTIVE_VERIFIED transition metadata.
         """
+        from adaptive_automata.models.versioning import ModelSource, VersionedProtocolModel
+
         start_time = time.perf_counter()
+
 
         # Step 1: Extract access sequences S_passive from passive model
         access_sequences = self.extract_access_sequences(passive_model)

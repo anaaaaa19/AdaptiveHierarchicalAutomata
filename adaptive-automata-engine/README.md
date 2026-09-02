@@ -2,7 +2,7 @@
 
 **Adaptive Hierarchical Automata Engine for Real-Time Detection of Previously Unseen Protocol Deviations**
 
-Phase 4: Hierarchical Formal-Analysis Engine (DFA $\to$ PDA $\to$ CFG Formal Escalation)
+Phase 5: Adaptive Model Management Subsystem (Safety-Guaranteed Model Adaptation & Poisoning Protection)
 
 ---
 
@@ -10,47 +10,13 @@ Phase 4: Hierarchical Formal-Analysis Engine (DFA $\to$ PDA $\to$ CFG Formal Esc
 
 The Adaptive Automata Engine is a research-grade framework designed to detect zero-day and unseen protocol anomalies in network traffic and communication streams.
 
-### Central Design Principle
-> *"Use the least expressive formal model capable of explaining the observed behavior, and escalate only when the simpler model fails."*
+### Core Research Principle (Phase 5)
+$$\text{OBSERVE} \to \text{DETECT NOVELTY} \to \text{ACCUMULATE EVIDENCE} \to \text{ANALYZE CONTEXT} \to \text{DETECT DRIFT} \to \text{GENERATE CANDIDATE} \to \text{FORMALLY VALIDATE} \to \text{ACCEPT/REJECT} \to \text{UPDATE VERSION} \to \text{ACTIVATE/ROLLBACK}$$
 
-### Multi-Tiered Formal Model Hierarchy
-
-```
-Incoming Trace
-      │
-      ▼
-Tokenizer
-      │
-      ▼
-┌────────────────────────────────────────┐
-│ Level 1: Fast-Path DFA / Mealy Machine │
-└───────────────────┬────────────────────┘
-                    │
-           ┌────────┴────────┐
-      (Recognized)     (Deviation)
-           │                 │
-           ▼                 ▼
-     [ Status.KNOWN ]  [ DeviationEvent ]
-                             │
-                             ▼
-                  [ EscalationController ]
-                             │
-            ┌────────────────┴────────────────┐
-            ▼                                 ▼
-┌─────────────────────────┐       ┌─────────────────────────┐
-│ Level 2: Pushdown (PDA) │       │ Level 3: Context-Free   │
-└───────────┬─────────────┘       │          (CFG Parser)   │
-            │                     └───────────┬─────────────┘
-            └────────────────┬────────────────┘
-                             │
-                             ▼
-                  [ Unified AnalysisResult ]
-                 - KNOWN
-                 - NOVEL_BUT_VALID
-                 - STRUCTURAL_VIOLATION
-                 - ANOMALOUS
-                 - UNKNOWN
-```
+The system enforces strict research invariants:
+- **No direct mutation**: New observed behavior NEVER directly mutates the active protocol model.
+- **Strict distinctions**: $\text{NEW BEHAVIOR} \neq \text{MALICIOUS}$, $\text{NEW BEHAVIOR} \neq \text{LEGITIMATE}$, $\text{FREQUENT BEHAVIOR} \neq \text{LEGITIMATE}$.
+- **Poisoning resistance**: Frequency alone is NEVER sufficient to cause a model update. Multiple independent evidence dimensions (frequency + session diversity + successful follow-ups + structural validity) are required.
 
 ---
 
@@ -76,6 +42,19 @@ adaptive-automata-engine/
 │       │   ├── escalation.py
 │       │   └── event.py
 │       │
+│       ├── adaptation/
+│       │   ├── __init__.py
+│       │   ├── candidate.py
+│       │   ├── drift.py
+│       │   ├── engine.py
+│       │   ├── evidence.py
+│       │   ├── lifecycle.py
+│       │   ├── novelty.py
+│       │   ├── policy.py
+│       │   ├── rollback.py
+│       │   ├── updater.py
+│       │   └── validator.py
+│       │
 │       ├── models/
 │       │   ├── __init__.py
 │       │   └── versioning.py
@@ -98,6 +77,7 @@ adaptive-automata-engine/
 │           └── passive.py
 │
 ├── tests/
+│   ├── test_adaptation.py
 │   ├── test_cfg.py
 │   ├── test_dfa.py
 │   ├── test_equivalence.py
@@ -121,6 +101,7 @@ adaptive-automata-engine/
 │   ├── lstar_mealy_example.py
 │   ├── phase3_pipeline_example.py
 │   ├── phase4_hierarchical_example.py
+│   ├── phase5_adaptation_example.py
 │   └── toy_protocol.py
 │
 ├── requirements.txt
@@ -137,17 +118,17 @@ adaptive-automata-engine/
 - Python 3.11+
 
 ### Running Tests
-Run the complete 40-test suite using pytest:
+Run the complete 48-test suite using pytest:
 
 ```powershell
 $env:PYTHONPATH="src"; python -m pytest tests
 ```
 
-### Running Phase 4 Demonstration
-Execute the Phase 4 Hierarchical Formal Analysis demonstration script:
+### Running Phase 5 Demonstration
+Execute the Phase 5 Adaptive Model Management demonstration script:
 
 ```powershell
-$env:PYTHONPATH="src"; python examples/phase4_hierarchical_example.py
+$env:PYTHONPATH="src"; python examples/phase5_adaptation_example.py
 ```
 
 ---
@@ -158,4 +139,7 @@ $env:PYTHONPATH="src"; python examples/phase4_hierarchical_example.py
 - **Phase 2 (Complete)**: Active Automata Learning (L* algorithm, Observation Tables, Equivalence/Membership Oracles).
 - **Phase 3 (Complete)**: Trace-Based Protocol Inference & Hybrid Active/Passive Engine.
 - **Phase 4 (Complete)**: Hierarchical Formal-Analysis Engine (DFA fast-path, PDA nested context, CFG parser, EscalationController, AnalysisResult).
-- **Phase 5**: Adaptive Learning with Anomaly Detection, Poisoning Protection, and Agentic AI.
+- **Phase 5 (Complete)**: Adaptive Model Management Subsystem (Novelty detection, evidence store, concept drift, candidate generation, formal validation, model updating, rollback manager, poisoning defense policy).
+- **Phase 6**: Protocol Anomaly Detection & Cybersecurity Classification (Attack scenarios, zero-day threat tagging, fuzzing).
+- **Phase 7**: Agentic AI Orchestration Layer.
+- **Phase 8**: Real-Time Network Deployment.

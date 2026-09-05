@@ -1,0 +1,18 @@
+[
+  {
+    "session_id": "sess_norm_01",
+    "sequence": ["HELLO", "AUTH", "REQUEST", "RESPONSE", "LOGOUT"]
+  },
+  {
+    "session_id": "sess_v2_02",
+    "sequence": ["HELLO", "AUTH", "CAPABILITIES", "REQUEST", "RESPONSE", "LOGOUT"]
+  },
+  {
+    "session_id": "sess_attack_03",
+    "sequence": ["REQUEST", "RESPONSE", "LOGOUT"]
+  },
+  {
+    "session_id": "sess_poison_04",
+    "sequence": ["HELLO", "AUTH", "MALICIOUS_INJECT", "LOGOUT"]
+  }
+]

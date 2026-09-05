@@ -1,13 +1,14 @@
 import {
-  AdaptationStatusDTO,
-  DriftStatusDTO,
-  ExperimentSummaryDTO,
-  InvestigationResultDTO,
-  ProtocolEventDTO,
-  ProtocolSessionDTO,
-  SecurityAlertDTO,
   SystemStatusDTO,
-  VersionedModelDTO,
+  ProtocolEventDTO,
+  SecurityAlertDTO,
+  SessionDTO,
+  ModelVersionDTO,
+  AutomataGraphDTO,
+  AdaptationStateDTO,
+  DriftDataDTO,
+  AIInvestigationDTO,
+  ExperimentResultsDTO,
 } from '../types';
 
 const API_BASE = '';
@@ -27,44 +28,101 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T>
   return res.json();
 }
 
+// Named API Helper Exports
+export const fetchStatus = async (): Promise<SystemStatusDTO> => {
+  return fetchJson<SystemStatusDTO>('/status');
+};
+
+export const fetchEvents = async (limit: number = 50, sessionId?: string): Promise<ProtocolEventDTO[]> => {
+  const url = `/events?limit=${limit}${sessionId ? `&session_id=${sessionId}` : ''}`;
+  const res = await fetchJson<{ events?: ProtocolEventDTO[] } | ProtocolEventDTO[]>(url);
+  if (Array.isArray(res)) return res;
+  return res.events || [];
+};
+
+export const fetchAlerts = async (): Promise<SecurityAlertDTO[]> => {
+  const res = await fetchJson<{ alerts?: SecurityAlertDTO[] } | SecurityAlertDTO[]>('/alerts');
+  if (Array.isArray(res)) return res;
+  return res.alerts || [];
+};
+
+export const updateAlertStatus = async (alertId: string, state: SecurityAlertDTO['state']): Promise<any> => {
+  return fetchJson(`/alerts/${alertId}/status`, {
+    method: 'POST',
+    body: JSON.stringify({ state }),
+  });
+};
+
+export const fetchSessions = async (): Promise<SessionDTO[]> => {
+  const res = await fetchJson<{ sessions?: SessionDTO[] } | SessionDTO[]>('/sessions');
+  if (Array.isArray(res)) return res;
+  return res.sessions || [];
+};
+
+export const fetchModels = async (): Promise<ModelVersionDTO[]> => {
+  const res = await fetchJson<{ models?: ModelVersionDTO[] } | ModelVersionDTO[]>('/models');
+  if (Array.isArray(res)) return res;
+  return res.models || [];
+};
+
+export const fetchModelGraph = async (versionId: string): Promise<AutomataGraphDTO> => {
+  return fetchJson<AutomataGraphDTO>(`/models/${versionId}/graph`);
+};
+
+export const fetchAdaptationState = async (): Promise<AdaptationStateDTO> => {
+  return fetchJson<AdaptationStateDTO>('/adaptation');
+};
+
+export const promoteCandidateModel = async (candidateVersion: string): Promise<any> => {
+  return fetchJson('/adaptation/promote', {
+    method: 'POST',
+    body: JSON.stringify({ candidate_version: candidateVersion }),
+  });
+};
+
+export const fetchDriftMetrics = async (): Promise<DriftDataDTO> => {
+  return fetchJson<DriftDataDTO>('/drift');
+};
+
+export const fetchInvestigations = async (): Promise<AIInvestigationDTO[]> => {
+  const res = await fetchJson<{ investigations?: AIInvestigationDTO[] } | AIInvestigationDTO[]>('/investigations');
+  if (Array.isArray(res)) return res;
+  return res.investigations || [];
+};
+
+export const triggerInvestigation = async (alertId: string): Promise<AIInvestigationDTO> => {
+  return fetchJson<AIInvestigationDTO>('/investigations/trigger', {
+    method: 'POST',
+    body: JSON.stringify({ alert_id: alertId }),
+  });
+};
+
+export const fetchExperimentResults = async (): Promise<ExperimentResultsDTO> => {
+  return fetchJson<ExperimentResultsDTO>('/experiments/results');
+};
+
+export const startCapture = async (): Promise<any> => {
+  return fetchJson('/capture/start', { method: 'POST' });
+};
+
+export const stopCapture = async (): Promise<any> => {
+  return fetchJson('/capture/stop', { method: 'POST' });
+};
+
 export const api = {
-  getHealth: () => fetchJson<{ service: string; pipeline: string }>('/health'),
-  getStatus: () => fetchJson<SystemStatusDTO>('/status'),
-  getMetrics: () => fetchJson<Record<string, any>>('/metrics'),
-  getDrift: () => fetchJson<DriftStatusDTO>('/drift'),
-  getAdaptation: () => fetchJson<AdaptationStatusDTO>('/adaptation'),
-
-  getModels: () => fetchJson<{ model_id: string; active_version: string; versions: string[] }>('/models'),
-  getActiveModel: () => fetchJson<VersionedModelDTO>('/models/active'),
-  activateModel: (version: string, reason: string = 'User requested activation') =>
-    fetchJson<{ status: string; active_version: string }>(`/models/${version}/activate`, {
-      method: 'POST',
-      body: JSON.stringify({ reason }),
-    }),
-  rollbackModel: () =>
-    fetchJson<{ status: string; active_version: string }>('/models/rollback', {
-      method: 'POST',
-    }),
-
-  getSessions: () => fetchJson<{ count: number; sessions: ProtocolSessionDTO[] }>('/sessions'),
-  getSessionDetails: (id: string) => fetchJson<ProtocolSessionDTO & { events: ProtocolEventDTO[] }>(`/sessions/${id}`),
-
-  getEvents: (limit: number = 50) => fetchJson<{ count: number; total_in_store: number; events: ProtocolEventDTO[] }>(`/events?limit=${limit}`),
-  getEventDetails: (id: string) => fetchJson<ProtocolEventDTO>(`/events/${id}`),
-
-  getAlerts: () => fetchJson<{ count: number; alerts: SecurityAlertDTO[] }>('/alerts'),
-  updateAlertStatus: (alertId: string, status: string) =>
-    fetchJson<SecurityAlertDTO>(`/alerts/${alertId}/status`, {
-      method: 'POST',
-      body: JSON.stringify({ status }),
-    }),
-
-  getInvestigations: () => fetchJson<{ investigations: any[] }>('/investigations'),
-  triggerInvestigation: (alertId: string) =>
-    fetchJson<InvestigationResultDTO>('/investigations/run', {
-      method: 'POST',
-      body: JSON.stringify({ alert_id: alertId }),
-    }),
-
-  getExperimentResults: () => fetchJson<{ experiments: Record<string, ExperimentSummaryDTO> }>('/experiments/results'),
+  fetchStatus,
+  fetchEvents,
+  fetchAlerts,
+  updateAlertStatus,
+  fetchSessions,
+  fetchModels,
+  fetchModelGraph,
+  fetchAdaptationState,
+  promoteCandidateModel,
+  fetchDriftMetrics,
+  fetchInvestigations,
+  triggerInvestigation,
+  fetchExperimentResults,
+  startCapture,
+  stopCapture,
 };

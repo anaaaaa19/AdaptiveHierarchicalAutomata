@@ -1,0 +1,6 @@
+Reference,Year,Problem,Technique,Automata Type,Protocol Learning,Adaptation,Hierarchy,Security,Poisoning Protection,Real-Time Capability,Technical Difference
+Angluin (Inf Comput),1987,Regular Language Inference,L* Active Learning,DFA,Active,No,No,No,No,Offline,Theoretical active learning algorithm; no protocol security or hierarchy.
+De Ruiter & Poll (USENIX),2015,TLS Protocol Flaws,L* Mealy Learning,Mealy Machine,Active,No,No,Yes,No,Offline,Offline state fuzzing; static model without real-time adaptation.
+Schneider (ACM CSUR),2000,Enforceable Security Policies,Security Automata,DFA,None,No,No,Yes,No,Real-Time,Static policy enforcement; no learning or adaptation.
+Comparetti et al. (NDSS),2009,Protocol State Inference,ProState Clustered Execution,PTA,Passive,No,No,Yes,No,Offline,Passive message clustering; static state graphs.
+Proposed System,2026,Protocol Evolution & Zero-Day Detection,Adaptive Hierarchical Automata,DFA/PDA/CFG,Hybrid,Evidence + Drift + Validation,Multi-Tier,Yes,Multi-Session + Formal Validation,Real-Time,Multi-tier hierarchical short-circuiting with poisoning-resistant formal adaptation.

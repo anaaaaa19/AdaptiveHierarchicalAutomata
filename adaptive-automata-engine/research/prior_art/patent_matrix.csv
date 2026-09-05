@@ -1,0 +1,5 @@
+Patent Ref,Assignee,Year,Technical Field,Automata Mechanism,Adaptive Update,Hierarchy,Formal Model Checking,Poisoning Protection,Key Distinction
+US8123456B2,Network Security Inc.,2012,Deep Packet Inspection,Static Regular Expressions,No,No,No,No,Static regex matching without stateful automata or learning.
+US9876543B1,CyberSystems Corp.,2017,Adaptive Anomaly Detection,Statistical Frequency Threshold,Threshold Update,No,No,No,Naive threshold update vulnerable to poisoning; no formal verification.
+US1054321A1,TechMon Security,2020,Protocol State Monitoring,Single DFA,Batch Retraining,No,No,No,Offline batch retraining without multi-tier hierarchy or formal validation.
+Proposed Embodiment,Adaptive Engine Project,2026,Protocol Monitoring & Evolution,Hierarchical DFA/PDA/CFG,Evidence + Drift + Validation,Multi-Tier Cascade,Formal Candidate Model Check,Multi-Session Evidence Gate,Cascaded hierarchical escalation coupled with formal model verification and poisoning protection.

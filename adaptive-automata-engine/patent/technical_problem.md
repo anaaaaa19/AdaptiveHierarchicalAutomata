@@ -1,0 +1,3 @@
+# Technical Problem Addressed
+
+Conventional network intrusion detection systems enforce rigid, static rules or single-tier state machine models. When protocol specifications evolve (e.g., adding extension headers or capabilities), static systems generate excessive false positive alerts. Conversely, naive adaptive systems that update state models based on event frequencies are vulnerable to model poisoning attacks, wherein malicious actors inject repeated transition patterns to corrupt the active state model. Additionally, applying deep context-free grammar parsing to all incoming traffic introduces unacceptable latency overhead on high-speed network interfaces.

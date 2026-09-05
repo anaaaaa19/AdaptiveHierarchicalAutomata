@@ -1,0 +1,21 @@
+experiment:
+  name: legitimate_evolution
+  description: "Evaluates adaptation precision and false positive reduction under legitimate protocol evolution (Protocol v1 to v2)."
+  seeds: [1, 2, 3, 4, 5]
+
+dataset:
+  protocol: toy_protocol
+  train_size: 1000
+  validation_size: 200
+  test_size: 500
+  categories:
+    - normal
+    - legitimate_evolution
+
+models:
+  - static_dfa
+  - static_hierarchical
+  - naive_adaptive
+  - proposed
+
+output_dir: experiments/results

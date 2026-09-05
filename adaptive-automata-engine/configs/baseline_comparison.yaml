@@ -1,0 +1,25 @@
+experiment:
+  name: baseline_comparison
+  description: "Standard benchmark comparing Static DFA, Static Hierarchical, Naive Adaptive, and Proposed system."
+  seeds: [1, 2, 3, 4, 5]
+
+dataset:
+  protocol: toy_protocol
+  train_size: 1000
+  validation_size: 200
+  test_size: 500
+  categories:
+    - normal
+    - legitimate_evolution
+    - structural_anomaly
+    - behavioral_anomaly
+    - unseen
+    - poisoning
+
+models:
+  - static_dfa
+  - static_hierarchical
+  - naive_adaptive
+  - proposed
+
+output_dir: experiments/results

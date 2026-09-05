@@ -1,0 +1,581 @@
+{
+  "experiment": "hierarchical_efficiency",
+  "timestamp": "2026-09-05T15:11:46.897925+00:00",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "configuration": {
+    "name": "hierarchical_efficiency",
+    "description": "Measures DFA, PDA, and CFG resolution distributions and processing latency.",
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "dataset_params": {},
+    "models": [
+      "static_dfa",
+      "static_hierarchical",
+      "naive_adaptive",
+      "proposed"
+    ],
+    "ablation_params": {},
+    "output_dir": "experiments/results"
+  },
+  "summary": {
+    "static_dfa": {
+      "precision": {
+        "mean": 0.7035625768828775,
+        "std_dev": 0.010751562627476797,
+        "ci95_lower": 0.6941384167223188,
+        "ci95_upper": 0.7129867370434362,
+        "sample_size": 5,
+        "min_val": 0.6872427983539094,
+        "max_val": 0.7161290322580646
+      },
+      "recall": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "f1": {
+        "mean": 0.8259521866595462,
+        "std_dev": 0.007431395850286486,
+        "ci95_lower": 0.8194382809942776,
+        "ci95_upper": 0.8324660923248147,
+        "sample_size": 5,
+        "min_val": 0.8146341463414634,
+        "max_val": 0.8345864661654135
+      },
+      "accuracy": {
+        "mean": 0.7192000000000001,
+        "std_dev": 0.014872793954062578,
+        "ci95_lower": 0.7061634213077204,
+        "ci95_upper": 0.7322365786922798,
+        "sample_size": 5,
+        "min_val": 0.696,
+        "max_val": 0.736
+      },
+      "fpr": {
+        "mean": 0.8408029036591189,
+        "std_dev": 0.046507568194045404,
+        "ci95_lower": 0.8000372227506826,
+        "ci95_upper": 0.8815685845675553,
+        "sample_size": 5,
+        "min_val": 0.7904191616766467,
+        "max_val": 0.9156626506024096
+      },
+      "unseen_behavior_detection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "legitimate_novelty_recognition": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "adaptation_precision": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "rejection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "dfa_resolution_pct": {
+        "mean": 5.32,
+        "std_dev": 1.5594870951694344,
+        "ci95_lower": 3.953049291305645,
+        "ci95_upper": 6.686950708694356,
+        "sample_size": 5,
+        "min_val": 2.8000000000000003,
+        "max_val": 7.000000000000001
+      },
+      "pda_escalation_pct": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "cfg_escalation_pct": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "mean_latency_ms": {
+        "mean": 7.420480251312256e-05,
+        "std_dev": 4.577802820259196e-06,
+        "ci95_lower": 7.019218142199615e-05,
+        "ci95_upper": 7.821742360424897e-05,
+        "sample_size": 5,
+        "min_val": 6.90012238919735e-05,
+        "max_val": 8.139666169881821e-05
+      },
+      "p95_latency_ms": {
+        "mean": 0.00010011717677116394,
+        "std_dev": 0.0,
+        "ci95_lower": 0.00010011717677116394,
+        "ci95_upper": 0.00010011717677116394,
+        "sample_size": 5,
+        "min_val": 0.00010011717677116394,
+        "max_val": 0.00010011717677116394
+      },
+      "throughput_msgs_sec": {
+        "mean": 13516081.60490622,
+        "std_dev": 809041.0523438229,
+        "ci95_lower": 12806925.855371749,
+        "ci95_upper": 14225237.354440691,
+        "sample_size": 5,
+        "min_val": 12285516.12718681,
+        "max_val": 14492496.561591048
+      }
+    },
+    "static_hierarchical": {
+      "precision": {
+        "mean": 0.7989446113333846,
+        "std_dev": 0.0009241807321352086,
+        "ci95_lower": 0.798134531204689,
+        "ci95_upper": 0.7997546914620801,
+        "sample_size": 5,
+        "min_val": 0.7980769230769231,
+        "max_val": 0.8004807692307693
+      },
+      "recall": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "f1": {
+        "mean": 0.88823679757483,
+        "std_dev": 0.0005708860825205107,
+        "ci95_lower": 0.8877363938603636,
+        "ci95_upper": 0.8887372012892963,
+        "sample_size": 5,
+        "min_val": 0.8877005347593583,
+        "max_val": 0.8891855807743659
+      },
+      "accuracy": {
+        "mean": 0.8324,
+        "std_dev": 0.0008944271909999167,
+        "ci95_lower": 0.831616,
+        "ci95_upper": 0.833184,
+        "sample_size": 5,
+        "min_val": 0.832,
+        "max_val": 0.834
+      },
+      "fpr": {
+        "mean": 0.5018036216723181,
+        "std_dev": 0.0034247921366186832,
+        "ci95_lower": 0.4988016590060139,
+        "ci95_upper": 0.5048055843386222,
+        "sample_size": 5,
+        "min_val": 0.49700598802395207,
+        "max_val": 0.5060240963855421
+      },
+      "unseen_behavior_detection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "legitimate_novelty_recognition": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "adaptation_precision": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "rejection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "dfa_resolution_pct": {
+        "mean": 5.32,
+        "std_dev": 1.5594870951694344,
+        "ci95_lower": 3.953049291305645,
+        "ci95_upper": 6.686950708694356,
+        "sample_size": 5,
+        "min_val": 2.8000000000000003,
+        "max_val": 7.000000000000001
+      },
+      "pda_escalation_pct": {
+        "mean": 5.640000000000001,
+        "std_dev": 1.0990905331227272,
+        "ci95_lower": 4.676604670968351,
+        "ci95_upper": 6.60339532903165,
+        "sample_size": 5,
+        "min_val": 4.2,
+        "max_val": 6.800000000000001
+      },
+      "cfg_escalation_pct": {
+        "mean": 5.680000000000001,
+        "std_dev": 0.6723094525588647,
+        "ci95_lower": 5.090694781967782,
+        "ci95_upper": 6.269305218032219,
+        "sample_size": 5,
+        "min_val": 5.2,
+        "max_val": 6.800000000000001
+      },
+      "mean_latency_ms": {
+        "mean": 0.00010032029822468758,
+        "std_dev": 4.818963968243525e-06,
+        "ci95_lower": 9.609629006715463e-05,
+        "ci95_upper": 0.00010454430638222053,
+        "sample_size": 5,
+        "min_val": 9.500468149781227e-05,
+        "max_val": 0.00010620243847370148
+      },
+      "p95_latency_ms": {
+        "mean": 0.00016004778444766998,
+        "std_dev": 5.470890951569105e-05,
+        "ci95_lower": 0.00011209331091209763,
+        "ci95_upper": 0.00020800225798324235,
+        "sample_size": 5,
+        "min_val": 0.00010011717677116394,
+        "max_val": 0.000200001522898674
+      },
+      "throughput_msgs_sec": {
+        "mean": 9986316.165757854,
+        "std_dev": 474891.51739103516,
+        "ci95_lower": 9570055.397546697,
+        "ci95_upper": 10402576.93396901,
+        "sample_size": 5,
+        "min_val": 9415979.655190557,
+        "max_val": 10525797.089515295
+      }
+    },
+    "naive_adaptive": {
+      "precision": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "recall": {
+        "mean": 0.7537546745215744,
+        "std_dev": 0.0019180743584719356,
+        "ci95_lower": 0.7520734082182089,
+        "ci95_upper": 0.7554359408249399,
+        "sample_size": 5,
+        "min_val": 0.7507507507507507,
+        "max_val": 0.7560240963855421
+      },
+      "f1": {
+        "mean": 0.8595885479038253,
+        "std_dev": 0.0012479916661405522,
+        "ci95_lower": 0.8584946349770947,
+        "ci95_upper": 0.860682460830556,
+        "sample_size": 5,
+        "min_val": 0.8576329331046312,
+        "max_val": 0.8610634648370497
+      },
+      "accuracy": {
+        "mean": 0.836,
+        "std_dev": 0.0014142135623730963,
+        "ci95_lower": 0.834760387157214,
+        "ci95_upper": 0.8372396128427859,
+        "sample_size": 5,
+        "min_val": 0.834,
+        "max_val": 0.838
+      },
+      "fpr": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "unseen_behavior_detection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "legitimate_novelty_recognition": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "adaptation_precision": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "rejection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "dfa_resolution_pct": {
+        "mean": 49.8,
+        "std_dev": 0.141421356237309,
+        "ci95_lower": 49.6760387157214,
+        "ci95_upper": 49.9239612842786,
+        "sample_size": 5,
+        "min_val": 49.6,
+        "max_val": 50.0
+      },
+      "pda_escalation_pct": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "cfg_escalation_pct": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "mean_latency_ms": {
+        "mean": 7.93195329606533e-05,
+        "std_dev": 2.2404061292242023e-06,
+        "ci95_lower": 7.735573040300953e-05,
+        "ci95_upper": 8.128333551829708e-05,
+        "sample_size": 5,
+        "min_val": 7.659615948796272e-05,
+        "max_val": 8.280063048005104e-05
+      },
+      "p95_latency_ms": {
+        "mean": 0.00010011717677116394,
+        "std_dev": 0.0,
+        "ci95_lower": 0.00010011717677116394,
+        "ci95_upper": 0.00010011717677116394,
+        "sample_size": 5,
+        "min_val": 0.00010011717677116394,
+        "max_val": 0.00010011717677116394
+      },
+      "throughput_msgs_sec": {
+        "mean": 12615184.953669365,
+        "std_dev": 351960.20790252235,
+        "ci95_lower": 12306678.229173327,
+        "ci95_upper": 12923691.678165404,
+        "sample_size": 5,
+        "min_val": 12077202.724210266,
+        "max_val": 13055484.85309048
+      }
+    },
+    "proposed": {
+      "precision": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "recall": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "f1": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "accuracy": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "fpr": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "unseen_behavior_detection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "legitimate_novelty_recognition": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "adaptation_precision": {
+        "mean": 0.0,
+        "std_dev": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "sample_size": 5,
+        "min_val": 0.0,
+        "max_val": 0.0
+      },
+      "rejection_rate": {
+        "mean": 1.0,
+        "std_dev": 0.0,
+        "ci95_lower": 1.0,
+        "ci95_upper": 1.0,
+        "sample_size": 5,
+        "min_val": 1.0,
+        "max_val": 1.0
+      },
+      "dfa_resolution_pct": {
+        "mean": 22.080000000000002,
+        "std_dev": 1.5530614926653727,
+        "ci95_lower": 20.718681580231873,
+        "ci95_upper": 23.44131841976813,
+        "sample_size": 5,
+        "min_val": 19.6,
+        "max_val": 23.799999999999997
+      },
+      "pda_escalation_pct": {
+        "mean": 5.640000000000001,
+        "std_dev": 1.0990905331227272,
+        "ci95_lower": 4.676604670968351,
+        "ci95_upper": 6.60339532903165,
+        "sample_size": 5,
+        "min_val": 4.2,
+        "max_val": 6.800000000000001
+      },
+      "cfg_escalation_pct": {
+        "mean": 5.680000000000001,
+        "std_dev": 0.6723094525588647,
+        "ci95_lower": 5.090694781967782,
+        "ci95_upper": 6.269305218032219,
+        "sample_size": 5,
+        "min_val": 5.2,
+        "max_val": 6.800000000000001
+      },
+      "mean_latency_ms": {
+        "mean": 0.0001028807833790779,
+        "std_dev": 2.940692311793628e-06,
+        "ci95_lower": 0.00010030315291832593,
+        "ci95_upper": 0.00010545841383982988,
+        "sample_size": 5,
+        "min_val": 9.999889880418777e-05,
+        "max_val": 0.00010779919102787971
+      },
+      "p95_latency_ms": {
+        "mean": 0.000200001522898674,
+        "std_dev": 0.0,
+        "ci95_lower": 0.000200001522898674,
+        "ci95_upper": 0.000200001522898674,
+        "sample_size": 5,
+        "min_val": 0.000200001522898674,
+        "max_val": 0.000200001522898674
+      },
+      "throughput_msgs_sec": {
+        "mean": 9726186.861705255,
+        "std_dev": 271141.22838018,
+        "ci95_lower": 9488521.09618619,
+        "ci95_upper": 9963852.627224319,
+        "sample_size": 5,
+        "min_val": 9276507.462299727,
+        "max_val": 10000110.120793868
+      }
+    }
+  }
+}

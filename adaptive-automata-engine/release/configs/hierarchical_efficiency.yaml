@@ -1,0 +1,21 @@
+experiment:
+  name: hierarchical_efficiency
+  description: "Measures DFA, PDA, and CFG resolution distributions and processing latency."
+  seeds: [1, 2, 3, 4, 5]
+
+dataset:
+  protocol: toy_protocol
+  train_size: 1000
+  validation_size: 200
+  test_size: 500
+  categories:
+    - normal
+    - structural_anomaly
+    - behavioral_anomaly
+
+models:
+  - static_dfa
+  - static_hierarchical
+  - proposed
+
+output_dir: experiments/results

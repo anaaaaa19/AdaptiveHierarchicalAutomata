@@ -1,0 +1,28 @@
+experiment:
+  name: ablation_study
+  description: "Ablation study evaluating the proposed system with key subcomponents systematically disabled."
+  seeds: [1, 2, 3, 4, 5]
+
+dataset:
+  protocol: toy_protocol
+  train_size: 1000
+  validation_size: 200
+  test_size: 500
+  categories:
+    - normal
+    - legitimate_evolution
+    - structural_anomaly
+    - poisoning
+
+models:
+  - proposed
+
+ablation:
+  disable_hierarchy: false
+  disable_drift: true
+  disable_evidence: false
+  disable_validation: true
+  disable_poisoning_protection: true
+  disable_versioning: false
+
+output_dir: experiments/results

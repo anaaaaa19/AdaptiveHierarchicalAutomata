@@ -81,7 +81,7 @@ describe('Frontend API Client Tests', () => {
       '/alerts/ALT-100/status',
       expect.objectContaining({
         method: 'POST',
-        body: JSON.stringify({ state: 'ACKNOWLEDGED' }),
+        body: JSON.stringify({ status: 'ACKNOWLEDGED', state: 'ACKNOWLEDGED' }),
       })
     );
     expect(result.state).toBe('ACKNOWLEDGED');

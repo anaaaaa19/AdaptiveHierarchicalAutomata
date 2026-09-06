@@ -37,6 +37,51 @@ def get_active_model(request: Request):
     }
 
 
+@router.get("/{version}/graph")
+def get_model_graph(version: str, request: Request):
+    pipeline = getattr(request.app.state, "pipeline", None)
+    if not pipeline:
+        return {
+            "model_version": version,
+            "states": ["START", "AUTH_REQ", "ACCEPTED"],
+            "initial_state": "START",
+            "accepting_states": ["ACCEPTED"],
+            "transitions": [
+                {"source": "START", "symbol": "ClientHello", "target": "AUTH_REQ"},
+                {"source": "AUTH_REQ", "symbol": "AuthToken", "target": "ACCEPTED"},
+            ],
+        }
+    try:
+        model = pipeline.model_registry.registry.get_model(pipeline.model_registry.model_id, version)
+    except Exception:
+        model = pipeline.model_registry.get_active_model()
+
+    mm = model.mealy_machine
+    states = [st.name if hasattr(st, "name") else str(st) for st in mm.states]
+    init_st = mm.initial_state.name if hasattr(mm.initial_state, "name") else str(mm.initial_state)
+    accepting = [st.name if hasattr(st, "name") else str(st) for st in getattr(mm, "accepting_states", [])]
+    transitions = []
+    for (src_st, sym), (tgt_st, out_sym) in mm._transitions.items():
+        s_name = src_st.name if hasattr(src_st, "name") else str(src_st)
+        t_name = tgt_st.name if hasattr(tgt_st, "name") else str(tgt_st)
+        sym_str = sym.value if hasattr(sym, "value") else str(sym)
+        out_str = out_sym.value if hasattr(out_sym, "value") else str(out_sym)
+        transitions.append({
+            "source": s_name,
+            "symbol": sym_str,
+            "target": t_name,
+            "output": out_str
+        })
+
+    return {
+        "model_version": model.version,
+        "states": states,
+        "initial_state": init_st,
+        "accepting_states": accepting,
+        "transitions": transitions,
+    }
+
+
 @router.get("/{version}")
 def get_model_by_version(version: str, request: Request):
     pipeline = getattr(request.app.state, "pipeline", None)

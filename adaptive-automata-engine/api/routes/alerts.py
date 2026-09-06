@@ -49,10 +49,14 @@ def update_alert_status(alert_id: str, body: AlertStatusUpdateRequest, request: 
     if not pipeline:
         raise HTTPException(status_code=500, detail="Pipeline uninitialized.")
     try:
-        st_enum = AlertState(body.status)
+        st_str = body.status or body.state
+        if not st_str:
+            raise ValueError("Must provide status or state field.")
+        st_enum = AlertState(st_str)
         alert = pipeline.alert_manager.update_alert_status(alert_id, st_enum)
         d = alert.to_dict()
         d["status"] = st_enum.value
+        d["state"] = st_enum.value
         return d
     except (KeyError, ValueError) as e:
         raise HTTPException(status_code=400, detail=str(e))

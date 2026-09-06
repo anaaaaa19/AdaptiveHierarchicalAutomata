@@ -12,7 +12,8 @@ class ModelActivateRequest(BaseModel):
 
 
 class AlertStatusUpdateRequest(BaseModel):
-    status: str = Field(..., description="New alert status (NEW, ACKNOWLEDGED, INVESTIGATING, RESOLVED, FALSE_POSITIVE).")
+    status: Optional[str] = Field(None, description="New alert status (NEW, ACKNOWLEDGED, INVESTIGATING, RESOLVED, FALSE_POSITIVE).")
+    state: Optional[str] = Field(None, description="New alert state (alias for status).")
     notes: Optional[str] = Field(None, description="Operator notes for status change.")
 
 

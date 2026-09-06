@@ -1,6 +1,7 @@
-import React from 'react';
-import { Activity, ShieldAlert, Cpu, Radio, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
+import { Activity, ShieldAlert, Cpu, Radio, RefreshCw, Play } from 'lucide-react';
 import { SystemStatusDTO } from '../types';
+import { triggerReplay } from '../api/client';
 
 interface NavbarProps {
   status: SystemStatusDTO | null;
@@ -9,6 +10,20 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ status, wsConnected, onRefresh }) => {
+  const [isReplaying, setIsReplaying] = useState(false);
+
+  const handleRunReplay = async () => {
+    setIsReplaying(true);
+    try {
+      await triggerReplay();
+      if (onRefresh) onRefresh();
+    } catch (e) {
+      console.error('Replay trigger error:', e);
+    } finally {
+      setIsReplaying(false);
+    }
+  };
+
   return (
     <header className="bg-slate-900 border-b border-slate-800 px-6 py-3.5 flex items-center justify-between sticky top-0 z-40 shadow-lg">
       <div className="flex items-center space-x-3">
@@ -54,6 +69,17 @@ export const Navbar: React.FC<NavbarProps> = ({ status, wsConnected, onRefresh }
           <span className="font-mono font-bold text-indigo-400">{status?.active_model_version || 'v1.0.0'}</span>
         </div>
 
+        {/* Replay Stream Trigger Button */}
+        <button
+          onClick={handleRunReplay}
+          disabled={isReplaying}
+          className="px-3 py-1.5 text-cyan-300 hover:text-white bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-700/50 rounded-lg transition-colors flex items-center gap-1.5 font-sans"
+          title="Run deterministic replay trace"
+        >
+          <Play className={`w-3.5 h-3.5 text-cyan-400 ${isReplaying ? 'animate-spin' : ''}`} />
+          <span>{isReplaying ? 'Replaying...' : 'Run Replay'}</span>
+        </button>
+
         {/* Refresh button */}
         {onRefresh && (
           <button
@@ -68,3 +94,4 @@ export const Navbar: React.FC<NavbarProps> = ({ status, wsConnected, onRefresh }
     </header>
   );
 };
+

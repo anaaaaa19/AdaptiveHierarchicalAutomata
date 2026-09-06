@@ -19,9 +19,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onNavigateToAlerts,
   onNavigateToMonitor,
 }) => {
-  const dfaPct = status?.metrics?.dfa_resolution_percentage ?? 95.0;
-  const pdaPct = status?.metrics?.pda_escalation_percentage ?? 4.0;
-  const cfgPct = status?.metrics?.cfg_escalation_percentage ?? 1.0;
+  const dfaPct = status?.metrics?.dfa_resolution_percentage ?? 0.0;
+  const pdaPct = status?.metrics?.pda_escalation_percentage ?? 0.0;
+  const cfgPct = status?.metrics?.cfg_escalation_percentage ?? 0.0;
 
   const unackAlerts = alerts.filter(a => a.state === 'NEW').length;
 

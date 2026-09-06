@@ -74,6 +74,45 @@ def get_adaptation(request: Request):
     }
 
 
+@router.post("/capture/start")
+def start_capture(request: Request):
+    pipeline = getattr(request.app.state, "pipeline", None)
+    if not pipeline:
+        return {"status": "error", "detail": "Pipeline uninitialized"}
+    try:
+        pipeline.capture_source.start()
+        return {"status": "started", "is_capture_active": True}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+
+
+@router.post("/capture/stop")
+def stop_capture(request: Request):
+    pipeline = getattr(request.app.state, "pipeline", None)
+    if not pipeline:
+        return {"status": "error", "detail": "Pipeline uninitialized"}
+    try:
+        pipeline.capture_source.stop()
+        return {"status": "stopped", "is_capture_active": False}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+
+
+@router.post("/adaptation/promote")
+def promote_candidate(request: Request):
+    pipeline = getattr(request.app.state, "pipeline", None)
+    if not pipeline:
+        return {"status": "error", "detail": "Pipeline uninitialized"}
+    reg = pipeline.model_registry
+    history = reg.get_version_history()
+    active = reg.active_version
+    if len(history) > 1:
+        cand = [v for v in history if v != active][-1]
+        reg.set_active_model(cand)
+        return {"status": "promoted", "active_version": cand}
+    return {"status": "no_candidate", "active_version": active}
+
+
 @router.get("/experiments/results")
 def get_experiment_results():
     import glob
@@ -94,3 +133,38 @@ def get_experiment_results():
             pass
 
     return {"experiments": res}
+
+
+@router.post("/replay/trigger")
+@router.post("/replay/start")
+def trigger_replay(request: Request):
+    pipeline = getattr(request.app.state, "pipeline", None)
+    if not pipeline:
+        return {"status": "error", "detail": "Pipeline uninitialized"}
+    
+    from adaptive_automata.deployment.capture.replay import ReplayCaptureSource
+    
+    replay_records = [
+        {"packet_id": "pkt_rep_1", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:ClientHello"},
+        {"packet_id": "pkt_rep_2", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:AuthToken"},
+        {"packet_id": "pkt_rep_3", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:DataStream"},
+        {"packet_id": "pkt_rep_4", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:Logout"},
+        {"packet_id": "pkt_rep_5", "src_ip": "10.0.0.3", "src_port": 5002, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-102:ClientHello"},
+        {"packet_id": "pkt_rep_6", "src_ip": "10.0.0.3", "src_port": 5002, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-102:UNEXPECTED_DEVIATION_PAYLOAD"},
+    ]
+    
+    replay_source = ReplayCaptureSource(replay_records)
+    replay_source.start()
+    
+    prev_source = pipeline.capture_source
+    pipeline.capture_source = replay_source
+    try:
+        events = pipeline.run_replay()
+        return {
+            "status": "completed",
+            "events_generated": len(events),
+            "events": [e.to_dict() for e in events],
+        }
+    finally:
+        pipeline.capture_source = prev_source
+

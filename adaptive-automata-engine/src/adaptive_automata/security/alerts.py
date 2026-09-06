@@ -73,5 +73,26 @@ class SecurityAlert:
             f"Reasons: [{reasons_str}]. Active Model: '{self.model_version}' (Level: {self.analysis_level})."
         )
 
+    def to_dict(self) -> dict[str, Any]:
+        """Convert SecurityAlert to JSON serializable dictionary."""
+        return {
+            "alert_id": self.alert_id,
+            "session_id": self.session_id,
+            "severity": self.severity.value if hasattr(self.severity, "value") else str(self.severity),
+            "classification": self.classification.value if hasattr(self.classification, "value") else str(self.classification),
+            "model_version": self.model_version,
+            "current_state": self.current_state,
+            "state": self.current_state,
+            "representative_symbol": self.triggering_symbol,
+            "triggering_symbol": self.triggering_symbol,
+            "reason_codes": [r.value if hasattr(r, "value") else str(r) for r in self.reason_codes],
+            "evidence": self.evidence,
+            "count": self.evidence.get("count", 1),
+            "trace_position": self.trace_position,
+            "analysis_level": self.analysis_level,
+            "timestamp": self.timestamp,
+        }
+
     def __repr__(self) -> str:
         return f"SecurityAlert(id='{self.alert_id}', severity={self.severity.value}, class={self.classification.value})"
+

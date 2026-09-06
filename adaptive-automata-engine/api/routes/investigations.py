@@ -19,6 +19,7 @@ def list_investigations(request: Request):
 
 
 @router.post("/run")
+@router.post("/trigger")
 def trigger_investigation(body: InvestigationRunRequest, request: Request):
     pipeline = getattr(request.app.state, "pipeline", None)
     if not pipeline or not pipeline.agent_router:

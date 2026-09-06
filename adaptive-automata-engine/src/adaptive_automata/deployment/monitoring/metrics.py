@@ -71,15 +71,24 @@ class MetricsCollector:
             p99 = sorted_lat[int(0.99 * (n - 1))]
             avg_lat = sum(sorted_lat) / n if n > 0 else 0.0
 
+            total_esc = self.dfa_count + self.pda_count + self.cfg_count
+            dfa_pct = round((self.dfa_count / total_esc) * 100, 1) if total_esc > 0 else 0.0
+            pda_pct = round((self.pda_count / total_esc) * 100, 1) if total_esc > 0 else 0.0
+            cfg_pct = round((self.cfg_count / total_esc) * 100, 1) if total_esc > 0 else 0.0
+
             return {
                 "uptime_seconds": round(elapsed, 2),
                 "packets_processed": self.packets_processed,
                 "messages_processed": self.messages_processed,
                 "events_processed": self.events_processed,
+                "total_events_processed": self.events_processed,
                 "throughput_events_per_sec": round(self.events_processed / elapsed, 2),
                 "alerts_generated": self.alerts_generated,
                 "events_dropped": self.events_dropped,
                 "queue_depth": self.current_queue_depth,
+                "dfa_resolution_percentage": dfa_pct,
+                "pda_escalation_percentage": pda_pct,
+                "cfg_escalation_percentage": cfg_pct,
                 "latency_ms": {
                     "avg": round(avg_lat, 4),
                     "p50": round(p50, 4),

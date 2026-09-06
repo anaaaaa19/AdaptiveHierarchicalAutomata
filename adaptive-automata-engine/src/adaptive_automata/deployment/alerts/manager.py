@@ -98,6 +98,11 @@ class AlertManager:
     def update_alert_status(self, alert_id: str, new_status: AlertState) -> SecurityAlert:
         """Update the lifecycle status of an alert."""
         with self._lock:
+            if alert_id not in self._alerts_by_id and self.event_store:
+                alt = self.event_store.get_alert(alert_id)
+                if alt:
+                    self._alerts_by_id[alert_id] = alt
+
             if alert_id not in self._alerts_by_id:
                 raise KeyError(f"SecurityAlert '{alert_id}' not found.")
             self._alert_status[alert_id] = new_status
@@ -105,6 +110,7 @@ class AlertManager:
             if self.event_store:
                 self.event_store.store_alert(alert)
             return alert
+
 
     def get_alert_status(self, alert_id: str) -> AlertState:
         with self._lock:

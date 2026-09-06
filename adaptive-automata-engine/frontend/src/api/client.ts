@@ -49,7 +49,7 @@ export const fetchAlerts = async (): Promise<SecurityAlertDTO[]> => {
 export const updateAlertStatus = async (alertId: string, state: SecurityAlertDTO['state']): Promise<any> => {
   return fetchJson(`/alerts/${alertId}/status`, {
     method: 'POST',
-    body: JSON.stringify({ state }),
+    body: JSON.stringify({ status: state, state }),
   });
 };
 
@@ -109,6 +109,10 @@ export const stopCapture = async (): Promise<any> => {
   return fetchJson('/capture/stop', { method: 'POST' });
 };
 
+export const triggerReplay = async (): Promise<any> => {
+  return fetchJson('/replay/trigger', { method: 'POST' });
+};
+
 export const api = {
   fetchStatus,
   fetchEvents,
@@ -125,4 +129,6 @@ export const api = {
   fetchExperimentResults,
   startCapture,
   stopCapture,
+  triggerReplay,
 };
+

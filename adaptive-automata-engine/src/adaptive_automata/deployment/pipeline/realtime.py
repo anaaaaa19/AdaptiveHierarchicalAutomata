@@ -181,11 +181,11 @@ class RealTimePipeline:
                     self.event_store.store_event(event)
 
                 # Metrics Update
-                level_str = analysis_res.level_used.value if hasattr(analysis_res.level_used, "value") else str(analysis_result.level_used)
+                level_str = analysis_res.level_used.value if hasattr(analysis_res.level_used, "value") else str(analysis_res.level_used)
                 self.metrics.record_event(latency_ms=latency_ms, level_used=level_str, is_alert=alert is not None)
 
                 # 10. Optional Out-of-Band Adaptation Evidence Accumulation (Phase 5)
-                if self.adaptation_engine and novelty_status == NoveltyStatus.NOVEL:
+                if self.adaptation_engine and novelty_res.status == NoveltyStatus.NOVEL:
                     self._trigger_adaptation_evidence(sess_ctx, analysis_res)
 
                 # 11. Optional Out-of-Band AI Agent Investigation (Phase 7)

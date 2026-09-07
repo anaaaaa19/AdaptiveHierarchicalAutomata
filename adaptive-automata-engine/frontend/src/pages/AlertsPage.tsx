@@ -183,8 +183,9 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
                       </span>
                     </td>
                     <td className="py-3 px-4 text-slate-400 text-[11px] font-sans">
-                      {new Date(alt.created_at * 1000).toLocaleTimeString()}
+                      {alt.timestamp ? (typeof alt.timestamp === 'string' ? alt.timestamp : new Date(alt.timestamp > 1e11 ? alt.timestamp : alt.timestamp * 1000).toLocaleTimeString()) : (alt.created_at ? new Date(alt.created_at > 1e11 ? alt.created_at : alt.created_at * 1000).toLocaleTimeString() : 'Just now')}
                     </td>
+
                     <td className="py-3 px-4 text-right font-sans" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => handleRunAIInvestigation(alt.alert_id)}

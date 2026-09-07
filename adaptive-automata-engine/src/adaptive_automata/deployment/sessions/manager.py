@@ -89,8 +89,19 @@ class SessionContext:
         return ProtocolSession(session_id=self.session_id, messages=msgs)
 
     def to_dict(self) -> dict[str, Any]:
+        sev = self.security.highest_severity
+        max_escalation = "CFG" if sev in ("HIGH", "CRITICAL") else ("PDA" if sev == "MEDIUM" else "DFA")
         return {
             "session_id": self.session_id,
+            "protocol": self.network.protocol,
+            "status": "CLOSED" if self.is_closed else "ACTIVE",
+            "state": self.protocol.current_formal_state,
+            "current_state": self.protocol.current_formal_state,
+            "event_count": self.protocol.packet_count,
+            "packet_count": self.protocol.packet_count,
+            "max_level_escalation": max_escalation,
+            "created_at": self.start_time,
+            "last_activity": self.last_seen,
             "network": {
                 "src_ip": self.network.src_ip,
                 "src_port": self.network.src_port,
@@ -98,7 +109,7 @@ class SessionContext:
                 "dst_port": self.network.dst_port,
                 "protocol": self.network.protocol,
             },
-            "protocol": {
+            "protocol_details": {
                 "current_formal_state": self.protocol.current_formal_state,
                 "recent_symbols": self.protocol.recent_symbols[-10:],
                 "packet_count": self.protocol.packet_count,
@@ -116,6 +127,7 @@ class SessionContext:
             "is_closed": self.is_closed,
             "close_reason": self.close_reason,
         }
+
 
 
 class SessionManager:

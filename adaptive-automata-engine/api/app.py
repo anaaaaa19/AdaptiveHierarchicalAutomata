@@ -22,9 +22,15 @@ def create_pipeline() -> RealTimePipeline:
     """Initialize a default operational deployment pipeline for demonstration/testing."""
     q0 = State("q0", is_initial=True)
     q1 = State("q1")
+    q2 = State("q2")
     mealy = MealyMachine[str, str]()
     mealy.add_transition(q0, "SYN", q1, "SYN-ACK")
     mealy.add_transition(q1, "ACK", q0, "READY")
+    mealy.add_transition(q0, "ClientHello", q1, "ACK")
+    mealy.add_transition(q1, "AuthToken", q2, "SUCCESS")
+    mealy.add_transition(q2, "DataStream", q2, "DATA_ACK")
+    mealy.add_transition(q2, "Logout", q0, "BYE")
+
 
     init_model = VersionedProtocolModel[str, str](
         model_id="toy_protocol_model",
@@ -45,14 +51,19 @@ def create_pipeline() -> RealTimePipeline:
 
     config = DeploymentConfig()
 
+    from adaptive_automata.agents.router import AgentRouter
+    agent_router = AgentRouter()
+
     pipeline = RealTimePipeline(
         capture_source=capture,
         analyzer=analyzer,
         model_registry=dep_model_reg,
         config=config,
         event_store=event_store,
+        agent_router=agent_router,
     )
     return pipeline
+
 
 
 @asynccontextmanager

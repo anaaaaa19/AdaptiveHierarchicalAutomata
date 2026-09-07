@@ -145,13 +145,14 @@ def trigger_replay(request: Request):
     from adaptive_automata.deployment.capture.replay import ReplayCaptureSource
     
     replay_records = [
-        {"packet_id": "pkt_rep_1", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:ClientHello"},
-        {"packet_id": "pkt_rep_2", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:AuthToken"},
-        {"packet_id": "pkt_rep_3", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:DataStream"},
-        {"packet_id": "pkt_rep_4", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-101:Logout"},
-        {"packet_id": "pkt_rep_5", "src_ip": "10.0.0.3", "src_port": 5002, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-102:ClientHello"},
-        {"packet_id": "pkt_rep_6", "src_ip": "10.0.0.3", "src_port": 5002, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "SESSION-102:UNEXPECTED_DEVIATION_PAYLOAD"},
+        {"packet_id": "pkt_rep_1", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "ClientHello"},
+        {"packet_id": "pkt_rep_2", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "AuthToken"},
+        {"packet_id": "pkt_rep_3", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "DataStream"},
+        {"packet_id": "pkt_rep_4", "src_ip": "10.0.0.1", "src_port": 5001, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "Logout"},
+        {"packet_id": "pkt_rep_5", "src_ip": "10.0.0.3", "src_port": 5002, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "ClientHello"},
+        {"packet_id": "pkt_rep_6", "src_ip": "10.0.0.3", "src_port": 5002, "dst_ip": "10.0.0.2", "dst_port": 8080, "protocol": "TCP", "payload": "UNEXPECTED_DEVIATION_PAYLOAD"},
     ]
+
     
     replay_source = ReplayCaptureSource(replay_records)
     replay_source.start()

@@ -113,13 +113,18 @@ class RealTimePipeline:
             if hasattr(self.tokenizer, "tokenize"):
                 try:
                     toks = self.tokenizer.tokenize(msg)
-                    symbols = [t.value if hasattr(t, "value") else str(t) for t in toks]
+                    raw_syms = [t.value if hasattr(t, "value") else str(t) for t in toks]
+                    symbols = []
+                    for rs in raw_syms:
+                        s = rs.split(":")[-1].strip() if ":" in rs and not rs.startswith("http") else rs.strip()
+                        symbols.append(s)
                 except Exception:
                     symbols = [msg.split(":")[-1].strip()] if ":" in msg else [msg.strip()]
             elif ":" in msg:
                 symbols = [msg.split(":")[-1].strip()]
             else:
                 symbols = [msg.strip()]
+
             if not symbols:
                 symbols = [msg]
 

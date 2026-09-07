@@ -148,8 +148,9 @@ export const AIInvestigationsPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="py-3 px-4 text-slate-400 font-sans text-[11px]">
-                      {new Date(inv.created_at * 1000).toLocaleTimeString()}
+                      {inv.created_at ? new Date(inv.created_at > 1e11 ? inv.created_at : inv.created_at * 1000).toLocaleTimeString() : 'Just now'}
                     </td>
+
                     <td className="py-3 px-4 text-right font-sans">
                       <button
                         onClick={(e) => {

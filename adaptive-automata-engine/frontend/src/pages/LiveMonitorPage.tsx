@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { ProtocolEventDTO } from '../types';
-import { Modal } from '../components/Modal';
-import { Activity, Search, Filter, Eye, RefreshCw } from 'lucide-react';
+import { Activity, Radio, Filter, Search, Eye, ShieldAlert, Cpu, Terminal, RefreshCw } from 'lucide-react';
 
 interface LiveMonitorPageProps {
   events: ProtocolEventDTO[];
   wsConnected: boolean;
-  onRefresh?: () => void;
+  onRefresh: () => void;
 }
 
 export const LiveMonitorPage: React.FC<LiveMonitorPageProps> = ({
@@ -15,234 +14,239 @@ export const LiveMonitorPage: React.FC<LiveMonitorPageProps> = ({
   onRefresh,
 }) => {
   const [selectedEvent, setSelectedEvent] = useState<ProtocolEventDTO | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const filteredEvents = events.filter((e) => {
-    const matchesSearch =
-      e.event_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.session_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.protocol.toLowerCase().includes(searchQuery.toLowerCase());
-
+  const filteredEvents = events.filter((evt) => {
     const matchesStatus =
       statusFilter === 'ALL' ||
-      (statusFilter === 'ACCEPTED' && e.analysis.status === 'ACCEPTED') ||
-      (statusFilter === 'DEVIATION' && e.analysis.status !== 'ACCEPTED');
-
-    return matchesSearch && matchesStatus;
+      evt.status === statusFilter ||
+      evt.analysis?.status === statusFilter;
+    const matchesQuery =
+      !searchQuery.trim() ||
+      evt.event_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      evt.session_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      evt.symbol.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStatus && matchesQuery;
   });
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Activity className="w-5 h-5 text-cyan-400" />
-            <span>Live Protocol Event Monitor</span>
-          </h2>
-          <p className="text-xs text-slate-400">
-            Real-time packet/message token stream evaluated across DFA, PDA, and CFG layers
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1.5 ${
-            wsConnected ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-          }`}>
-            <span className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}`}></span>
-            <span>{wsConnected ? 'WebSocket Streaming' : 'Polling Active'}</span>
-          </div>
-          {onRefresh && (
-            <button
-              onClick={onRefresh}
-              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 text-xs font-semibold flex items-center gap-1.5"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Refresh</span>
-            </button>
-          )}
-        </div>
-      </div>
+  const activeEvent = selectedEvent || (filteredEvents.length > 0 ? filteredEvents[0] : null);
 
-      {/* Filter Controls */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex-1 min-w-[240px] relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-          <input
-            type="text"
-            placeholder="Filter by Event ID, Session ID, Symbol, Protocol..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
-          />
+  return (
+    <div className="space-y-4 font-sans h-[calc(100vh-105px)] flex flex-col">
+      {/* Console Top Action Bar */}
+      <div className="flex justify-between items-center shrink-0">
+        <div className="flex items-center space-x-3">
+          <div className="p-1.5 bg-slate-900 border border-slate-800 rounded text-cyan-400">
+            <Activity className="w-4 h-4" />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-slate-100 tracking-tight flex items-center gap-2">
+              <span>Live Monitor Console</span>
+              <span className={`px-2 py-0.2 rounded text-[10px] font-mono font-bold ${
+                wsConnected ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400'
+              }`}>
+                {wsConnected ? 'LIVE WS CONNECTED' : 'POLLING'}
+              </span>
+            </h2>
+            <p className="text-[11px] text-slate-400">Real-time protocol event stream and state transduction inspector</p>
+          </div>
         </div>
 
         <div className="flex items-center space-x-2">
-          <Filter className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-xs text-slate-400 font-medium">Status Filter:</span>
-          {(['ALL', 'ACCEPTED', 'DEVIATION'] as const).map((st) => (
-            <button
-              key={st}
-              onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                statusFilter === st
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-800 text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {st}
-            </button>
-          ))}
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2" />
+            <input
+              type="text"
+              placeholder="Search session / symbol..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-slate-900 border border-slate-800 rounded pl-8 pr-3 py-1 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 font-mono w-52"
+            />
+          </div>
+
+          <button
+            onClick={onRefresh}
+            className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded border border-slate-800 text-xs font-semibold flex items-center gap-1.5"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Refresh Stream</span>
+          </button>
         </div>
       </div>
 
-      {/* Event Table */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider font-semibold">
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4">Event ID</th>
-                <th className="py-3 px-4">Session</th>
-                <th className="py-3 px-4">Protocol</th>
-                <th className="py-3 px-4">Symbol</th>
-                <th className="py-3 px-4">State</th>
-                <th className="py-3 px-4">Analysis Result</th>
-                <th className="py-3 px-4">Security Result</th>
-                <th className="py-3 px-4">Model Ver</th>
-                <th className="py-3 px-4 text-right">Inspect</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
-              {filteredEvents.length === 0 ? (
+      {/* Main Split Console Grid */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0 overflow-hidden">
+        {/* Left Pane (2/3 width): Live Real-Time Event Stream */}
+        <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800/80 rounded-lg flex flex-col min-h-0 overflow-hidden">
+          {/* Filter Toolbar */}
+          <div className="px-4 py-2.5 bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between shrink-0">
+            <div className="flex items-center space-x-2">
+              <Filter className="w-3.5 h-3.5 text-slate-500" />
+              <span className="text-[11px] font-semibold text-slate-400">Filter Status:</span>
+              {['ALL', 'ACCEPTED', 'UNKNOWN', 'REJECTED'].map((st) => (
+                <button
+                  key={st}
+                  onClick={() => setStatusFilter(st)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-semibold font-mono ${
+                    statusFilter === st
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {st}
+                </button>
+              ))}
+            </div>
+            <span className="text-[11px] font-mono text-slate-500">
+              Showing {filteredEvents.length} events
+            </span>
+          </div>
+
+          {/* Event Stream List Table */}
+          <div className="flex-1 overflow-y-auto font-mono text-xs">
+            <table className="w-full text-left">
+              <thead className="sticky top-0 bg-slate-950 border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider font-semibold font-sans">
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-slate-500 font-sans">
-                    No protocol events match current filter criteria.
-                  </td>
+                  <th className="py-2.5 px-3">Time</th>
+                  <th className="py-2.5 px-3">Session</th>
+                  <th className="py-2.5 px-3">Symbol</th>
+                  <th className="py-2.5 px-3">State</th>
+                  <th className="py-2.5 px-3">Level</th>
+                  <th className="py-2.5 px-3">Result</th>
                 </tr>
-              ) : (
-                filteredEvents.map((evt) => (
-                  <tr
-                    key={evt.event_id}
-                    onClick={() => setSelectedEvent(evt)}
-                    className="hover:bg-slate-800/50 cursor-pointer transition-colors"
-                  >
-                    <td className="py-2.5 px-4 text-slate-400 text-[11px] font-sans">
-                      {new Date(evt.timestamp * 1000).toLocaleTimeString()}
-                    </td>
-                    <td className="py-2.5 px-4 text-cyan-400 font-semibold">{evt.event_id}</td>
-                    <td className="py-2.5 px-4 text-slate-300">{evt.session_id}</td>
-                    <td className="py-2.5 px-4 text-slate-400 font-sans font-medium">{evt.protocol}</td>
-                    <td className="py-2.5 px-4 text-slate-100 font-bold">{evt.symbol}</td>
-                    <td className="py-2.5 px-4 text-purple-300">{evt.formal_state}</td>
-                    <td className="py-2.5 px-4 font-sans">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                        evt.analysis.status === 'ACCEPTED'
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                          : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                      }`}>
-                        {evt.analysis.status} ({evt.analysis.level_used})
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-4 font-sans">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        evt.security.severity === 'HIGH' || evt.security.severity === 'CRITICAL'
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                          : evt.security.severity === 'MEDIUM'
-                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                          : 'bg-slate-800 text-slate-400'
-                      }`}>
-                        {evt.security.classification} [{evt.security.severity}]
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-4 text-slate-400">{evt.model_version}</td>
-                    <td className="py-2.5 px-4 text-right">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedEvent(evt);
-                        }}
-                        className="p-1 text-slate-400 hover:text-indigo-300 hover:bg-slate-800 rounded"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
+              </thead>
+              <tbody className="divide-y divide-slate-800/50">
+                {filteredEvents.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-16 text-center text-slate-500 font-sans text-xs">
+                      No matching protocol events in stream.
                     </td>
                   </tr>
-                ))
+                ) : (
+                  filteredEvents.map((evt) => {
+                    const isSelected = activeEvent?.event_id === evt.event_id;
+                    return (
+                      <tr
+                        key={evt.event_id}
+                        onClick={() => setSelectedEvent(evt)}
+                        className={`cursor-pointer transition-colors ${
+                          isSelected
+                            ? 'bg-indigo-950/40 border-l-2 border-l-indigo-500'
+                            : 'hover:bg-slate-800/50'
+                        }`}
+                      >
+                        <td className="py-2 px-3 text-slate-400 text-[11px] font-sans">
+                          {new Date(evt.timestamp > 1e11 ? evt.timestamp : evt.timestamp * 1000).toLocaleTimeString()}
+                        </td>
+                        <td className="py-2 px-3 text-indigo-300 font-bold truncate max-w-[120px]">{evt.session_id}</td>
+                        <td className="py-2 px-3 text-sky-300 font-bold">{evt.symbol || evt.input_symbol}</td>
+                        <td className="py-2 px-3 text-purple-300">{evt.formal_state}</td>
+                        <td className="py-2 px-3 text-slate-400 text-[10px] font-sans">
+                          {evt.analysis?.level_used || evt.analysis_level || 'DFA'}
+                        </td>
+                        <td className="py-2 px-3 font-sans">
+                          <span className={`px-1.5 py-0.2 rounded text-[10px] font-semibold ${
+                            evt.analysis?.status === 'ACCEPTED' || evt.status === 'ACCEPTED'
+                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          }`}>
+                            {evt.analysis?.status || evt.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Right Pane (1/3 width): Instant Context & Transduction Panel */}
+        <div className="bg-slate-900/90 border border-slate-800/80 rounded-lg p-4 flex flex-col justify-between overflow-y-auto">
+          {activeEvent ? (
+            <div className="space-y-4">
+              <div className="pb-3 border-b border-slate-800/80">
+                <span className="text-[10px] uppercase font-bold text-slate-500 block">Selected Context</span>
+                <h3 className="text-xs font-bold text-indigo-400 font-mono truncate">{activeEvent.event_id}</h3>
+              </div>
+
+              {/* Session & Symbol Info */}
+              <div className="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-xs space-y-2">
+                <div>
+                  <span className="text-[10px] text-slate-500 block font-sans">Target Session</span>
+                  <span className="text-purple-300 font-bold truncate block">{activeEvent.session_id}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <span className="text-[10px] text-slate-500 block font-sans">Input Symbol</span>
+                    <span className="text-sky-300 font-bold">{activeEvent.symbol || activeEvent.input_symbol}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block font-sans">Formal State</span>
+                    <span className="text-purple-300 font-bold">{activeEvent.formal_state}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Analysis Transduction Step */}
+              <div className="bg-slate-950 p-3 rounded border border-slate-800 space-y-2 font-sans">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Formal Transduction</span>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Analysis Tier:</span>
+                  <span className="font-mono text-cyan-400 font-bold">{activeEvent.analysis?.level_used || 'DFA_MEALY'}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Result:</span>
+                  <span className={`font-mono font-bold ${
+                    (activeEvent.analysis?.status || activeEvent.status) === 'ACCEPTED' ? 'text-emerald-400' : 'text-rose-400'
+                  }`}>
+                    {activeEvent.analysis?.status || activeEvent.status}
+                  </span>
+                </div>
+              </div>
+
+              {/* Security Assessment Context */}
+              <div className="bg-slate-950 p-3 rounded border border-slate-800 space-y-2 font-sans">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Security Classification</span>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Classification:</span>
+                  <span className="font-bold text-slate-200">{activeEvent.security?.classification || 'BENIGN'}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Severity:</span>
+                  <span className={`font-bold ${
+                    (activeEvent.security?.severity || 'LOW') === 'HIGH' ? 'text-rose-400' : 'text-emerald-400'
+                  }`}>
+                    {activeEvent.security?.severity || 'LOW'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Raw Payload Snippet */}
+              {activeEvent.raw_payload_snippet && (
+                <div className="bg-slate-950 p-3 rounded border border-slate-800 space-y-1 font-mono text-[11px]">
+                  <span className="text-[10px] text-slate-500 font-sans font-bold uppercase block">Raw Payload</span>
+                  <div className="bg-slate-900 p-2 rounded text-slate-300 overflow-x-auto whitespace-pre-wrap">
+                    {activeEvent.raw_payload_snippet}
+                  </div>
+                </div>
               )}
-            </tbody>
-          </table>
+            </div>
+          ) : (
+            <div className="py-12 text-center text-xs text-slate-500">
+              Select an event from the stream to view state transduction context.
+            </div>
+          )}
+
+          <div className="pt-3 border-t border-slate-800/80 text-[11px] text-slate-500 flex justify-between font-mono">
+            <span>Latency: {activeEvent?.processing_latency_ms?.toFixed(2) || '0.00'} ms</span>
+            <span>Events: {filteredEvents.length}</span>
+          </div>
         </div>
       </div>
-
-      {/* Event Detail Modal */}
-      {selectedEvent && (
-        <Modal
-          isOpen={!!selectedEvent}
-          onClose={() => setSelectedEvent(null)}
-          title={`Event Inspection — ${selectedEvent.event_id}`}
-        >
-          <div className="space-y-4 font-sans">
-            <div className="grid grid-cols-2 gap-4 text-xs bg-slate-950 p-4 rounded-lg border border-slate-800">
-              <div>
-                <span className="text-slate-500 block uppercase font-bold">Session ID</span>
-                <span className="font-mono text-cyan-300 font-semibold">{selectedEvent.session_id}</span>
-              </div>
-              <div>
-                <span className="text-slate-500 block uppercase font-bold">Protocol</span>
-                <span className="font-semibold text-slate-200">{selectedEvent.protocol}</span>
-              </div>
-              <div>
-                <span className="text-slate-500 block uppercase font-bold">Symbol Token</span>
-                <span className="font-mono font-bold text-sky-400">{selectedEvent.symbol}</span>
-              </div>
-              <div>
-                <span className="text-slate-500 block uppercase font-bold">Formal State</span>
-                <span className="font-mono font-semibold text-purple-400">{selectedEvent.formal_state}</span>
-              </div>
-            </div>
-
-            {/* Analysis Breakdown */}
-            <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2">
-              <h4 className="text-xs font-bold text-slate-300 uppercase">Hierarchical Analysis Engine</h4>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                <div>
-                  <span className="text-slate-500 block text-[10px]">Evaluation Level</span>
-                  <span className="font-mono text-amber-400 font-bold">{selectedEvent.analysis.level_used}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block text-[10px]">Decision Status</span>
-                  <span className="font-bold text-emerald-400">{selectedEvent.analysis.status}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block text-[10px]">Latency</span>
-                  <span className="font-mono text-slate-300">{selectedEvent.processing_latency_ms} ms</span>
-                </div>
-              </div>
-              {selectedEvent.analysis.reason && (
-                <div className="text-xs text-slate-400 bg-slate-900 p-2.5 rounded border border-slate-800 mt-2">
-                  <span className="font-semibold text-slate-300">Reason:</span> {selectedEvent.analysis.reason}
-                </div>
-              )}
-            </div>
-
-            {/* Security Decision */}
-            <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2">
-              <h4 className="text-xs font-bold text-slate-300 uppercase">Backend Formal Security Decision</h4>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-slate-400">Classification:</span>
-                <span className="font-semibold text-rose-400">{selectedEvent.security.classification}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-slate-400">Severity:</span>
-                <span className="font-bold text-rose-500">{selectedEvent.security.severity}</span>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 };

@@ -68,6 +68,7 @@ export interface ProtocolEventDTO {
     classification: string;
     severity: string;
   };
+  raw_payload_snippet?: string;
   processing_latency_ms: number;
 }
 

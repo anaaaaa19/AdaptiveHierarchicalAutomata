@@ -154,7 +154,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ status, onRefresh })
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Brain className="w-4 h-4 text-purple-400" />
-              <h3 className="text-sm font-bold text-slate-200">Phase 7 Agentic AI Mode</h3>
+              <h3 className="text-sm font-bold text-slate-200">AI Security Investigation Engine</h3>
             </div>
             <button
               onClick={() => setAiMode(!aiMode)}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { SecurityAlertDTO } from '../types';
 import { updateAlertStatus, triggerInvestigation } from '../api/client';
-import { Modal } from '../components/Modal';
-import { AlertTriangle, Filter, CheckSquare, Brain, ShieldAlert, Check, RefreshCw } from 'lucide-react';
+import { DetailInspector } from '../components/DetailInspector';
+import { ShieldAlert, Filter, RefreshCw, Eye, Brain } from 'lucide-react';
 
 interface AlertsPageProps {
   alerts: SecurityAlertDTO[];
@@ -65,21 +65,21 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 font-sans">
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-rose-400" />
-            <span>Formal Security Alerts & Anomaly Center</span>
+          <h2 className="text-base font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 text-rose-400" />
+            <span>Security Alerts & Threat Management</span>
           </h2>
           <p className="text-xs text-slate-400">
-            Real-time protocol security alerts classified by Level 1-3 formal automata verification engine
+            Real-time security alerts classified by formal automata verification engine
           </p>
         </div>
         <button
           onClick={onRefresh}
-          className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 text-xs font-semibold flex items-center gap-1.5"
+          className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded border border-slate-800 text-xs font-semibold flex items-center gap-1.5"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Refresh Alerts</span>
@@ -87,18 +87,18 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
       </div>
 
       {/* Filtering Toolbar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-slate-900/90 border border-slate-800/80 rounded-lg p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* Severity filter */}
         <div className="flex items-center space-x-2">
-          <Filter className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-xs text-slate-400 font-medium">Severity:</span>
+          <Filter className="w-3.5 h-3.5 text-slate-500" />
+          <span className="text-[11px] font-semibold text-slate-400">Severity:</span>
           {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map((sev) => (
             <button
               key={sev}
               onClick={() => setSeverityFilter(sev)}
-              className={`px-2.5 py-1 rounded text-xs font-semibold ${
+              className={`px-2.5 py-0.5 rounded text-[11px] font-semibold transition-colors ${
                 severityFilter === sev
-                  ? 'bg-rose-600 text-white'
+                  ? 'bg-rose-600 text-white font-bold'
                   : 'bg-slate-800 text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -109,14 +109,14 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
 
         {/* Status filter */}
         <div className="flex items-center space-x-2">
-          <span className="text-xs text-slate-400 font-medium">Status:</span>
+          <span className="text-[11px] font-semibold text-slate-400">Status:</span>
           {['ALL', ...statuses].map((st) => (
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-2 py-1 rounded text-[11px] font-semibold ${
+              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
                 statusFilter === st
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-indigo-600 text-white font-bold'
                   : 'bg-slate-800 text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -127,25 +127,25 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
       </div>
 
       {/* Alerts Table */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+      <div className="bg-slate-900/90 border border-slate-800/80 rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider font-semibold">
-                <th className="py-3 px-4">Severity</th>
-                <th className="py-3 px-4">Alert ID</th>
-                <th className="py-3 px-4">Session</th>
-                <th className="py-3 px-4">Classification</th>
-                <th className="py-3 px-4">Formal State</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+              <tr className="bg-slate-950 border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider font-semibold font-sans">
+                <th className="py-2.5 px-4">Severity</th>
+                <th className="py-2.5 px-4">Alert ID</th>
+                <th className="py-2.5 px-4">Session</th>
+                <th className="py-2.5 px-4">Classification</th>
+                <th className="py-2.5 px-4">State</th>
+                <th className="py-2.5 px-4">Status</th>
+                <th className="py-2.5 px-4">Timestamp</th>
+                <th className="py-2.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
+            <tbody className="divide-y divide-slate-800/50 font-mono">
               {filteredAlerts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-slate-500 font-sans">
+                  <td colSpan={8} className="py-12 text-center text-slate-500 font-sans text-xs">
                     No security alerts found matching selected filters.
                   </td>
                 </tr>
@@ -156,23 +156,23 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
                     onClick={() => setSelectedAlert(alt)}
                     className="hover:bg-slate-800/50 cursor-pointer transition-colors"
                   >
-                    <td className="py-3 px-4 font-sans">
-                      <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${
+                    <td className="py-2.5 px-4 font-sans">
+                      <span className={`px-2 py-0.2 text-[10px] font-bold rounded ${
                         alt.severity === 'CRITICAL' || alt.severity === 'HIGH'
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                           : alt.severity === 'MEDIUM'
-                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                          : 'bg-sky-500/20 text-sky-400 border border-sky-500/40'
+                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                          : 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
                       }`}>
                         {alt.severity}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-rose-400 font-bold">{alt.alert_id}</td>
-                    <td className="py-3 px-4 text-slate-300">{alt.session_id}</td>
-                    <td className="py-3 px-4 font-sans text-slate-200 font-medium">{alt.classification}</td>
-                    <td className="py-3 px-4 text-purple-300">{alt.state}</td>
-                    <td className="py-3 px-4 font-sans">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                    <td className="py-2.5 px-4 text-rose-400 font-bold truncate max-w-[160px]">{alt.alert_id}</td>
+                    <td className="py-2.5 px-4 text-purple-300 truncate max-w-[160px]">{alt.session_id}</td>
+                    <td className="py-2.5 px-4 font-sans text-slate-200 font-medium">{alt.classification}</td>
+                    <td className="py-2.5 px-4 text-purple-300">{alt.state}</td>
+                    <td className="py-2.5 px-4 font-sans">
+                      <span className={`px-2 py-0.2 rounded text-[10px] font-semibold ${
                         alt.state === 'NEW'
                           ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
                           : alt.state === 'RESOLVED'
@@ -182,19 +182,27 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
                         {alt.state}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-400 text-[11px] font-sans">
+                    <td className="py-2.5 px-4 text-slate-400 text-[11px] font-sans">
                       {alt.timestamp ? (typeof alt.timestamp === 'string' ? alt.timestamp : new Date(alt.timestamp > 1e11 ? alt.timestamp : alt.timestamp * 1000).toLocaleTimeString()) : (alt.created_at ? new Date(alt.created_at > 1e11 ? alt.created_at : alt.created_at * 1000).toLocaleTimeString() : 'Just now')}
                     </td>
-
-                    <td className="py-3 px-4 text-right font-sans" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => handleRunAIInvestigation(alt.alert_id)}
-                        disabled={invitingAI}
-                        className="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded text-[11px] flex items-center gap-1 ml-auto transition-colors"
-                      >
-                        <Brain className="w-3.5 h-3.5" />
-                        <span>AI Analysis</span>
-                      </button>
+                    <td className="py-2.5 px-4 text-right font-sans" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center space-x-1.5 justify-end">
+                        <button
+                          onClick={() => handleRunAIInvestigation(alt.alert_id)}
+                          disabled={invitingAI}
+                          className="px-2 py-0.5 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded text-[10px] flex items-center gap-1 transition-colors"
+                        >
+                          <Brain className="w-3 h-3" />
+                          <span>Investigate</span>
+                        </button>
+                        <button
+                          onClick={() => setSelectedAlert(alt)}
+                          className="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-semibold flex items-center gap-1"
+                        >
+                          <Eye className="w-3 h-3" />
+                          <span>Inspect</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -204,81 +212,17 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
         </div>
       </div>
 
-      {/* Alert Details & Status Transition Modal */}
-      {selectedAlert && (
-        <Modal
-          isOpen={!!selectedAlert}
-          onClose={() => setSelectedAlert(null)}
-          title={`Security Alert Inspection — ${selectedAlert.alert_id}`}
-        >
-          <div className="space-y-5 font-sans">
-            {/* Formal Security Banner */}
-            <div className="bg-rose-950/40 border border-rose-500/40 p-4 rounded-lg flex items-start space-x-3">
-              <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="text-sm font-bold text-rose-300">FORMAL SECURITY DECISION</h4>
-                <p className="text-xs text-rose-200/80 mt-1">
-                  Classification: <strong>{selectedAlert.classification}</strong> | Severity: <strong>{selectedAlert.severity}</strong>
-                </p>
-                <p className="text-xs text-slate-400 mt-1 font-mono">
-                  State: {selectedAlert.state} | Symbol: {selectedAlert.representative_symbol} | Count: {selectedAlert.count}
-                </p>
-              </div>
-            </div>
-
-            {/* Reason Codes */}
-            {selectedAlert.reason_codes && selectedAlert.reason_codes.length > 0 && (
-              <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2">
-                <h5 className="text-xs font-bold text-slate-300 uppercase">Reason Codes</h5>
-                <div className="flex flex-wrap gap-2">
-                  {selectedAlert.reason_codes.map((rc, idx) => (
-                    <span key={idx} className="px-2 py-1 bg-slate-900 border border-slate-700 text-amber-300 font-mono text-xs rounded">
-                      {rc}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Change Status Controls */}
-            <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-3">
-              <h5 className="text-xs font-bold text-slate-300 uppercase">Update Alert SOC Status</h5>
-              <div className="flex flex-wrap gap-2">
-                {statuses.map((st) => (
-                  <button
-                    key={st}
-                    disabled={updating || selectedAlert.state === st}
-                    onClick={() => handleStatusChange(selectedAlert.alert_id, st)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 ${
-                      selectedAlert.state === st
-                        ? 'bg-emerald-600 text-white font-bold cursor-default'
-                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                    }`}
-                  >
-                    {selectedAlert.state === st && <Check className="w-3.5 h-3.5" />}
-                    <span>{st}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Trigger AI Action */}
-            <div className="pt-2 flex justify-between items-center">
-              <span className="text-xs text-slate-500">
-                AI investigation runs out-of-band to inspect context without altering formal decisions.
-              </span>
-              <button
-                onClick={() => handleRunAIInvestigation(selectedAlert.alert_id)}
-                disabled={invitingAI}
-                className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-lg shadow-md flex items-center gap-2"
-              >
-                <Brain className="w-4 h-4" />
-                <span>{invitingAI ? 'Spawning Agent...' : 'Trigger AI Investigation'}</span>
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )}
+      {/* Detail Inspector Drawer */}
+      <DetailInspector
+        isOpen={!!selectedAlert}
+        onClose={() => setSelectedAlert(null)}
+        title="Security Alert Inspection"
+        subtitle={selectedAlert?.alert_id}
+        type="alert"
+        data={selectedAlert}
+        onUpdateAlertStatus={handleStatusChange}
+        onTriggerAI={handleRunAIInvestigation}
+      />
     </div>
   );
 };
